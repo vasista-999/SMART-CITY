@@ -1,0 +1,2013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SMART CITY – Intelligent Living, Better Tomorrow</title>
+  <!-- Google Fonts: Poppins & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Poppins', 'sans-serif'],
+            display: ['Poppins', 'Inter', 'sans-serif']
+          },
+          colors: {
+            navy: '#0A2463',
+            skybrand: '#247BA0',
+            tealbrand: '#0D9488',
+            greenbrand: '#16A34A',
+            lightgrey: '#F8FAFC'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F8FAFC;
+      color: #0F172A;
+    }
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Poppins', sans-serif;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(203, 213, 225, 0.75);
+    }
+    .high-contrast {
+      background-color: #000000 !important;
+      color: #FFFFFF !important;
+    }
+    .high-contrast .glass-card,
+    .high-contrast .bg-white,
+    .high-contrast .bg-slate-50,
+    .high-contrast .bg-slate-100 {
+      background-color: #09090b !important;
+      color: #ffffff !important;
+      border-color: #facc15 !important;
+    }
+    .high-contrast .text-slate-600,
+    .high-contrast .text-slate-500,
+    .high-contrast .text-slate-700 {
+      color: #e4e4e7 !important;
+    }
+    .large-text {
+      font-size: 1.08rem;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    @keyframes pulseRing {
+      0% { transform: scale(0.85); opacity: 0.85; }
+      70% { transform: scale(1.75); opacity: 0; }
+      100% { transform: scale(1.75); opacity: 0; }
+    }
+    .pulse-ring {
+      animation: pulseRing 2.2s infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+  <!-- =====================================================================
+       1. TOP UTILITY & NAVIGATION BAR
+  ====================================================================== -->
+  <header class="sticky top-0 z-40 bg-[#0A2463]/95 backdrop-blur-lg text-white shadow-lg border-b border-sky-400/20">
+    <!-- Top Utility Bar -->
+    <div class="bg-[#06163d] border-b border-white/10 px-4 py-1.5 text-xs">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 text-emerald-400 font-semibold">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+            <span id="t-live-status">LIVE CITY GRID: OPERATIONAL (99.8% UPTIME)</span>
+          </span>
+          <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 font-medium">
+            Simulated Demonstration Data
+          </span>
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Language Switcher -->
+          <div class="flex items-center gap-1 bg-white/10 rounded-lg px-2 py-0.5">
+            <span aria-hidden="true">🌐</span>
+            <select id="lang-select" aria-label="Select Language" class="bg-transparent text-white text-xs font-semibold focus:outline-none cursor-pointer">
+              <option value="en" class="bg-slate-900">English</option>
+              <option value="hi" class="bg-slate-900">हिन्दी (Hindi)</option>
+              <option value="te" class="bg-slate-900">తెలుగు (Telugu)</option>
+            </select>
+          </div>
+
+          <!-- Accessibility: High Contrast -->
+          <button id="btn-contrast" type="button" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-xs font-semibold border border-white/15 transition">
+            Contrast
+          </button>
+
+          <!-- Accessibility: Font Size -->
+          <button id="btn-font" type="button" class="px-2 py-0.5 rounded bg-white/10 hover:bg-white/20 text-xs font-semibold border border-white/15 transition">
+            A+
+          </button>
+
+          <!-- Quick SOS Trigger -->
+          <button onclick="openSosModal()" type="button" class="bg-red-600 hover:bg-red-500 text-white px-2.5 py-0.5 rounded font-bold tracking-wide flex items-center gap-1 shadow">
+            <span>🚨 SOS 112</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Navigation Row -->
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <!-- Brand Logo -->
+      <a href="#home" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-400 via-[#247BA0] to-teal-500 flex items-center justify-center shadow-md shadow-sky-500/30 group-hover:scale-105 transition">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 9h.01M15 9h.01M9 12h.01M15 12h.01" />
+          </svg>
+        </div>
+        <div>
+          <div id="t-brand" class="font-display font-extrabold text-base sm:text-lg leading-none tracking-tight text-white">SMART CITY</div>
+          <div id="t-tagline" class="text-[11px] text-sky-300 font-medium">Intelligent Living, Better Tomorrow</div>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <nav aria-label="Main Navigation" class="hidden xl:flex items-center gap-1 text-xs font-semibold">
+        <a href="#home" class="px-2.5 py-1.5 rounded-lg text-sky-200 hover:text-white hover:bg-white/10">Home</a>
+        <a href="#about" class="px-2.5 py-1.5 rounded-lg text-sky-200 hover:text-white hover:bg-white/10">About City</a>
+        <a href="#transport" class="px-2.5 py-1.5 rounded-lg text-sky-200 hover:text-white hover:bg-white/10">Transportation</a>
+        <a href="#healthcare" class="px-2.5 py-1.5 rounded-lg text-sky-200 hover:text-white hover:bg-white/10">Healthcare</a>
+        <a href="#education" class="px-2.5 py-1.5 rounded-lg text-sky-200 hover:text-white hover:bg-white/10">Education</a>
+        <a href="#services" class="px-2.5 py-1.5 rounded-lg text-sky-200 hover:text-white hover:bg-white/10">Public Services</a>
+        <a href="#emergency" class="px-2.5 py-1.5 rounded-lg text-red-300 hover:text-white hover:bg-red-600/30">Emergency</a>
+        <a href="#dashboard" class="px-2.5 py-1.5 rounded-lg text-sky-200 hover:text-white hover:bg-white/10">Live Dashboard</a>
+        <a href="#contact" class="px-2.5 py-1.5 rounded-lg text-sky-200 hover:text-white hover:bg-white/10">Contact Us</a>
+      </nav>
+
+      <!-- Right Action Buttons -->
+      <div class="flex items-center gap-2">
+        <button onclick="openSearchModal()" aria-label="Search Smart City" type="button" class="p-2 rounded-xl bg-white/10 hover:bg-white/20 text-sky-200 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+          </svg>
+        </button>
+
+        <button onclick="toggleNotifDrawer()" aria-label="Notifications" type="button" class="relative p-2 rounded-xl bg-white/10 hover:bg-white/20 text-sky-200 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+          <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-orange-500"></span>
+        </button>
+
+        <button id="btn-auth-trigger" onclick="handleAuthButtonClick()" type="button" class="px-3.5 py-2 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-bold text-xs sm:text-sm shadow transition">
+          Login / Register
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Horizontal Strip -->
+    <div class="xl:hidden flex items-center gap-1.5 overflow-x-auto px-4 py-2 bg-[#071944] border-t border-white/10 text-xs no-scrollbar">
+      <a href="#home" class="whitespace-nowrap px-3 py-1 rounded-full bg-white/10 text-white font-medium">Home</a>
+      <a href="#dashboard" class="whitespace-nowrap px-3 py-1 rounded-full bg-white/10 text-white font-medium">Live Dashboard</a>
+      <a href="#transport" class="whitespace-nowrap px-3 py-1 rounded-full bg-white/10 text-white font-medium">Transportation</a>
+      <a href="#healthcare" className="whitespace-nowrap px-3 py-1 rounded-full bg-white/10 text-white font-medium">Healthcare</a>
+      <a href="#education" class="whitespace-nowrap px-3 py-1 rounded-full bg-white/10 text-white font-medium">Education</a>
+      <a href="#services" class="whitespace-nowrap px-3 py-1 rounded-full bg-white/10 text-white font-medium">Public Services</a>
+      <a href="#emergency" class="whitespace-nowrap px-3 py-1 rounded-full bg-red-600/80 text-white font-semibold">Emergency</a>
+      <a href="#map" class="whitespace-nowrap px-3 py-1 rounded-full bg-white/10 text-white font-medium">Smart Map</a>
+      <a href="#environment" class="whitespace-nowrap px-3 py-1 rounded-full bg-white/10 text-white font-medium">Environment</a>
+      <a href="#about" class="whitespace-nowrap px-3 py-1 rounded-full bg-white/10 text-white font-medium">About City</a>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       2. HERO SECTION – WELCOME TO THE SMART CITY OF TOMORROW
+  ====================================================================== -->
+  <section id="home" class="relative overflow-hidden bg-gradient-to-br from-[#0A2463] via-[#0f3585] to-[#0D9488] text-white py-14 sm:py-20">
+    <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-12 gap-10 items-center relative z-10">
+      <!-- Left Hero Copy & Actions -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-sky-300/30 text-sky-200 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>INTEGRATED COMMAND & CITIZEN SERVICE PORTAL</span>
+        </div>
+
+        <h1 id="t-hero-title" class="font-display text-3xl sm:text-5xl lg:text-[3.4rem] font-extrabold tracking-tight leading-tight">
+          WELCOME TO THE SMART CITY OF TOMORROW
+        </h1>
+
+        <p id="t-hero-sub" class="text-base sm:text-xl text-sky-100 max-w-2xl leading-relaxed">
+          Connecting People, Technology, and Innovation for a Better Future.
+        </p>
+
+        <!-- Primary CTA Buttons -->
+        <div class="flex flex-wrap items-center gap-3.5 pt-1">
+          <a href="#map" class="px-6 py-3.5 rounded-2xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-extrabold text-sm shadow-lg shadow-sky-950/30 transition transform hover:-translate-y-0.5">
+            🗺️ Explore Your City
+          </a>
+          <a href="#services" class="px-6 py-3.5 rounded-2xl bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/25 text-white font-bold text-sm transition">
+            🏛️ Access Public Services
+          </a>
+          <button onclick="openSosModal()" type="button" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white font-extrabold text-sm shadow-lg shadow-red-950/40 transition">
+            🚨 Emergency Help
+          </button>
+        </div>
+
+        <!-- Animated City Stats Strip -->
+        <div class="grid grid-cols-3 gap-3 pt-3 max-w-xl">
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-3.5">
+            <div class="text-xs text-sky-200">Air Quality (Demo)</div>
+            <div class="text-2xl font-extrabold text-emerald-300 mt-0.5">38 AQI</div>
+            <div class="text-[11px] text-sky-100/80">Clean Urban Air</div>
+          </div>
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-3.5">
+            <div class="text-xs text-sky-200">Metro & E-Buses</div>
+            <div class="text-2xl font-extrabold text-sky-200 mt-0.5">97.4%</div>
+            <div class="text-[11px] text-sky-100/80">Punctuality Index</div>
+          </div>
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-3.5">
+            <div class="text-xs text-sky-200">Solar Share</div>
+            <div class="text-2xl font-extrabold text-amber-300 mt-0.5">62.5%</div>
+            <div class="text-[11px] text-sky-100/80">Renewable Microgrid</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Interactive Smart-City SVG Illustration & 2.5D Layer Toggle -->
+      <div class="lg:col-span-5">
+        <div class="rounded-3xl bg-[#071842]/90 border border-sky-300/30 p-5 shadow-2xl">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <span class="text-xs font-bold text-sky-200 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span> SMART CITY DIGITAL TWIN
+            </span>
+            <button id="btn-hero-twin" onclick="toggleHeroTwinLayer()" type="button" class="px-2.5 py-1 rounded-lg bg-sky-500/20 hover:bg-sky-500/30 text-sky-200 border border-sky-400/30 text-[11px] font-bold transition">
+              Toggle Sensor Overlay
+            </button>
+          </div>
+
+          <svg id="hero-city-svg" viewBox="0 0 440 290" class="w-full h-auto rounded-2xl bg-gradient-to-b from-[#06122e] via-[#0c275e] to-[#0b3b4c] border border-white/10">
+            <!-- Ground & Parks -->
+            <polygon points="10,235 220,165 430,235 220,285" fill="#134e4a" fillOpacity="0.45" />
+            <ellipse cx="325" cy="232" rx="68" ry="22" fill="#16A34A" fillOpacity="0.35" />
+
+            <!-- Metro Line & Train -->
+            <path d="M 15 190 Q 220 140 425 195" fill="none" stroke="#38BDF8" strokeWidth="4" strokeDasharray="7 4" />
+            <rect x="195" y="156" width="52" height="12" rx="6" fill="#38BDF8" />
+
+            <!-- Skyscrapers & Civic Towers -->
+            <rect x="48" y="105" width="38" height="115" rx="4" fill="#247BA0" fillOpacity="0.45" stroke="#7DD3FC" strokeWidth="1.5" />
+            <rect x="98" y="68" width="48" height="152" rx="4" fill="#0D9488" fillOpacity="0.42" stroke="#5EEAD4" strokeWidth="1.5" />
+            <rect x="160" y="42" width="56" height="178" rx="6" fill="#38BDF8" fillOpacity="0.35" stroke="#BAE6FD" strokeWidth="2" />
+            <rect x="230" y="84" width="46" height="136" rx="4" fill="#247BA0" fillOpacity="0.45" stroke="#7DD3FC" strokeWidth="1.5" />
+            <rect x="292" y="112" width="64" height="108" rx="5" fill="#16A34A" fillOpacity="0.35" stroke="#86EFAC" strokeWidth="1.5" />
+
+            <!-- Sensor Overlay Network (Toggleable) -->
+            <g id="hero-sensor-links" stroke="#38BDF8" strokeOpacity="0.65" strokeDasharray="3 3" fill="none">
+              <line x1="122" y1="68" x2="221" y2="162" />
+              <line x1="188" y1="42" x2="221" y2="162" />
+              <line x1="324" y1="112" x2="221" y2="162" />
+            </g>
+
+            <!-- Glowing Markers -->
+            <a href="#healthcare">
+              <circle cx="122" cy="68" r="6" fill="#EF4444" />
+              <text x="98" y="56" fill="#FCA5A5" fontSize="9" fontWeight="bold">HOSPITALS</text>
+            </a>
+            <a href="#transport">
+              <circle cx="221" cy="162" r="6" fill="#FFFFFF" />
+              <text x="195" y="146" fill="#E0F2FE" fontSize="9" fontWeight="bold">METRO HUB</text>
+            </a>
+            <a href="#environment">
+              <circle cx="324" cy="112" r="6" fill="#4ADE80" />
+              <text x="298" y="100" fill="#BBF7D0" fontSize="9" fontWeight="bold">SOLAR & PARKS</text>
+            </a>
+          </svg>
+
+          <div class="mt-3 flex items-center justify-between text-[11px] text-sky-200/85">
+            <span>Click glowing sector markers to jump</span>
+            <span class="text-amber-300 font-semibold">Simulated Demonstration Data</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       3. LIVE CITY OVERVIEW (8 ANIMATED METRIC CARDS)
+  ====================================================================== -->
+  <section class="max-w-7xl mx-auto px-4 py-12">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
+      <div>
+        <span class="text-xs font-extrabold uppercase tracking-wider text-[#247BA0]">City-Wide Snapshot</span>
+        <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-[#0A2463]">Live City Overview</h2>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-slate-600">
+        <span class="px-2.5 py-1 rounded-lg bg-amber-100 text-amber-800 font-semibold">Simulated Demonstration Data</span>
+        <span id="overview-timestamp" class="px-2.5 py-1 rounded-lg bg-slate-200/80 font-medium">Updated: Just now</span>
+      </div>
+    </div>
+
+    <div id="overview-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Populated dynamically via JS with animated counters -->
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       4. SMART CITY LIVE DASHBOARD (CHART.JS + TELEMETRY CARDS)
+  ====================================================================== -->
+  <section id="dashboard" class="bg-slate-100/90 border-y border-slate-200 py-14">
+    <div class="max-w-7xl mx-auto px-4 space-y-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-teal-700">Command Center Telemetry</span>
+          <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-[#0A2463]">Smart City Live Dashboard</h2>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1">
+            Real-time operational indicators across weather, air quality, mobility, utilities, and waste management (<span class="font-semibold text-amber-700">Simulated Demonstration Data</span>).
+          </p>
+        </div>
+        <button onclick="refreshAllTelemetry()" type="button" class="px-4 py-2 rounded-xl bg-[#0A2463] hover:bg-[#247BA0] text-white text-xs font-bold flex items-center gap-2 self-start md:self-auto transition">
+          <span>🔄 Refresh Telemetry</span>
+          <span id="dash-last-updated" class="text-sky-200 font-normal">16:57 IST</span>
+        </button>
+      </div>
+
+      <!-- 8 Telemetry Status Cards with Progress Bars -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="glass-card rounded-2xl p-4">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+            <span>WEATHER</span><span class="text-amber-600">☀️ 27°C</span>
+          </div>
+          <div class="text-lg font-extrabold text-[#0A2463] mt-1">Partly Cloudy • Breezy</div>
+          <div class="text-xs text-slate-600 mt-1">Humidity 58% • Wind 14 km/h SE</div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+            <span>AIR QUALITY INDEX</span><span class="text-emerald-600">GOOD</span>
+          </div>
+          <div class="text-lg font-extrabold text-emerald-700 mt-1">38 AQI (PM2.5: 14 µg/m³)</div>
+          <div class="w-full h-2 bg-slate-200 rounded-full mt-2 overflow-hidden">
+            <div class="h-full bg-emerald-500 rounded-full" style="width: 24%"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+            <span>TRAFFIC CONGESTION</span><span class="text-teal-700">MODERATE-LOW</span>
+          </div>
+          <div class="text-lg font-extrabold text-[#0A2463] mt-1">28% Congestion Index</div>
+          <div class="w-full h-2 bg-slate-200 rounded-full mt-2 overflow-hidden">
+            <div class="h-full bg-teal-500 rounded-full" style="width: 28%"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+            <span>PUBLIC TRANSPORT</span><span class="text-emerald-600">ACTIVE</span>
+          </div>
+          <div class="text-lg font-extrabold text-[#0A2463] mt-1">4 Metro Lines • 420 E-Buses</div>
+          <div class="text-xs text-emerald-700 font-semibold mt-1">97.4% On-Time Schedule</div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+            <span>ELECTRICITY GRID</span><span class="text-sky-700">BALANCED</span>
+          </div>
+          <div class="text-lg font-extrabold text-[#0A2463] mt-1">785 MW Current Load</div>
+          <div class="w-full h-2 bg-slate-200 rounded-full mt-2 overflow-hidden">
+            <div class="h-full bg-[#247BA0] rounded-full" style="width: 68%"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+            <span>WATER SUPPLY STATUS</span><span class="text-cyan-700">OPTIMAL</span>
+          </div>
+          <div class="text-lg font-extrabold text-[#0A2463] mt-1">215 MLD • 99.1% Purity</div>
+          <div class="w-full h-2 bg-slate-200 rounded-full mt-2 overflow-hidden">
+            <div class="h-full bg-cyan-500 rounded-full" style="width: 92%"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+            <span>WASTE MANAGEMENT</span><span class="text-emerald-700">91.4% SEGREGATED</span>
+          </div>
+          <div class="text-lg font-extrabold text-[#0A2463] mt-1">1,420 Smart Bins Serviced</div>
+          <div class="w-full h-2 bg-slate-200 rounded-full mt-2 overflow-hidden">
+            <div class="h-full bg-emerald-600 rounded-full" style="width: 91%"></div>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-4">
+          <div class="flex justify-between items-center text-xs font-bold text-slate-500">
+            <span>CITY CLEANLINESS SCORE</span><span class="text-amber-600">TOP TIER</span>
+          </div>
+          <div class="text-lg font-extrabold text-[#0A2463] mt-1">94.2 / 100 Points</div>
+          <div class="w-full h-2 bg-slate-200 rounded-full mt-2 overflow-hidden">
+            <div class="h-full bg-amber-500 rounded-full" style="width: 94%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Interactive Chart.js Visualizations -->
+      <div class="grid lg:grid-cols-2 gap-6">
+        <div class="glass-card rounded-2xl p-5">
+          <h3 class="font-bold text-base text-[#0A2463]">Hourly Power Load vs. Solar Generation (MW)</h3>
+          <p class="text-xs text-slate-500 mb-3">Simulated microgrid load balance across the day</p>
+          <div class="h-64">
+            <canvas id="energyChart"></canvas>
+          </div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <h3 class="font-bold text-base text-[#0A2463]">Weekly AQI & Cleanliness Trend</h3>
+          <p class="text-xs text-slate-500 mb-3">Simulated 7-day urban air index & sanitation score</p>
+          <div class="h-64">
+            <canvas id="aqiTrendChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       5. TRANSPORTATION & SMART MOBILITY + AI SMART ROUTE PLANNER
+  ====================================================================== -->
+  <section id="transport" class="max-w-7xl mx-auto px-4 py-14 space-y-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
+      <div>
+        <span class="text-xs font-extrabold uppercase tracking-wider text-[#247BA0]">Smart Mobility Grid</span>
+        <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-[#0A2463]">Transportation & AI Smart Route Planner</h2>
+      </div>
+      <div class="px-3 py-1.5 rounded-xl bg-amber-100 text-amber-900 text-xs font-bold">
+        ⚠️ Construction Alert: East Ring Flyover Lane-2 work until 19:00
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-12 gap-6">
+      <!-- AI Smart Route Planner -->
+      <div class="lg:col-span-5 glass-card rounded-2xl p-6 space-y-4">
+        <div class="text-xs font-extrabold uppercase text-[#247BA0]">✨ AI Smart Route Planner</div>
+        <h3 className="font-bold text-lg text-[#0A2463]">Find Fastest & Greenest Route</h3>
+
+        <form id="route-form" class="space-y-3.5 text-sm">
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1">Starting Point</label>
+            <input id="route-origin" type="text" value="Central Metro Interchange" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:ring-2 focus:ring-sky-500 outline-none" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1">Destination</label>
+            <input id="route-dest" type="text" value="Tech Corridor EV Hub" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white focus:ring-2 focus:ring-sky-500 outline-none" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1">Travel Mode</label>
+            <div class="grid grid-cols-4 gap-2" id="route-mode-group">
+              <button type="button" data-mode="transit" class="route-mode-btn py-2 px-2 rounded-xl bg-[#0A2463] text-white text-xs font-bold">🚆 Transit</button>
+              <button type="button" data-mode="driving" class="route-mode-btn py-2 px-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">🚗 Driving</button>
+              <button type="button" data-mode="cycling" class="route-mode-btn py-2 px-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">🚲 Cycling</button>
+              <button type="button" data-mode="walking" class="route-mode-btn py-2 px-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold">🚶 Walking</button>
+            </div>
+          </div>
+
+          <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#0A2463] to-[#247BA0] hover:opacity-95 text-white font-bold text-sm shadow transition">
+            Compute Smart Route
+          </button>
+        </form>
+
+        <div id="route-output" class="p-4 rounded-2xl bg-sky-50 border border-sky-200 text-xs space-y-1.5">
+          <div class="font-extrabold text-[#0A2463] text-sm">Recommended: Blue Line Metro + E-Bus Feeder</div>
+          <div class="font-bold text-teal-800">Est. Time: 18 mins • Distance: 9.4 km • Fare: ₹25</div>
+          <p class="text-slate-600">Alternative: Riverfront Green Corridor (23 mins via EV/Car). Traffic Alert: Avoid East Ring Lane-2.</p>
+        </div>
+      </div>
+
+      <!-- Transit Schedules, Smart Parking & EV Charging -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="glass-card rounded-2xl p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <h3 class="font-bold text-base text-[#0A2463]">Metro, Train & Electric Bus Schedules</h3>
+            <span class="text-xs text-teal-700 font-semibold">48 Bike Stations (310 E-Bikes) Active</span>
+          </div>
+          <div id="transit-list" class="divide-y divide-slate-200 text-xs sm:text-sm"></div>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5">
+          <h3 class="font-bold text-base text-[#0A2463] mb-3">Smart Parking Finder & EV Charging Stations</h3>
+          <div id="parking-list" class="grid sm:grid-cols-2 gap-3 text-xs"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       6. HEALTHCARE & HOSPITALS
+  ====================================================================== -->
+  <section id="healthcare" class="bg-slate-100/90 border-y border-slate-200 py-14">
+    <div class="max-w-7xl mx-auto px-4 space-y-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-red-600">Medical Network & Emergency Care</span>
+          <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-[#0A2463]">Healthcare & Hospitals</h2>
+          <p class="text-xs text-slate-600 mt-1">
+            Bed counts are <span class="font-semibold text-amber-700">Sample Demonstration Data</span>; always verify critical care availability directly with the facility.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <button onclick="filterHospitals('All')" class="hosp-filter px-3 py-1.5 rounded-xl bg-red-600 text-white text-xs font-bold">All</button>
+          <button onclick="filterHospitals('Government')" class="hosp-filter px-3 py-1.5 rounded-xl bg-white text-slate-700 border text-xs font-bold">Government</button>
+          <button onclick="filterHospitals('Private')" class="hosp-filter px-3 py-1.5 rounded-xl bg-white text-slate-700 border text-xs font-bold">Private</button>
+          <button onclick="filterHospitals('Emergency')" class="hosp-filter px-3 py-1.5 rounded-xl bg-white text-slate-700 border text-xs font-bold">Emergency & Trauma</button>
+          <button onclick="filterHospitals('Blood')" class="hosp-filter px-3 py-1.5 rounded-xl bg-white text-slate-700 border text-xs font-bold">Blood Banks & Labs</button>
+          <button onclick="openAmbulanceModal()" type="button" class="px-3.5 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-extrabold shadow">
+            🚑 108 Ambulance Help
+          </button>
+        </div>
+      </div>
+
+      <div id="hospitals-grid" class="grid md:grid-cols-2 gap-6"></div>
+
+      <!-- Blood Donor Directory & Voluntary Registration -->
+      <div class="glass-card rounded-2xl p-6 grid lg:grid-cols-12 gap-6 items-start">
+        <div class="lg:col-span-7 space-y-3">
+          <h3 class="font-bold text-lg text-[#0A2463]">🩸 Voluntary Blood Donor Directory</h3>
+          <p class="text-xs text-slate-600">Community-registered voluntary blood donors (Sample demonstration directory).</p>
+          <div id="donor-list" class="grid sm:grid-cols-2 gap-2.5 text-xs"></div>
+        </div>
+
+        <form id="donor-form" class="lg:col-span-5 p-4 rounded-2xl bg-rose-50/70 border border-rose-200 space-y-3 text-xs">
+          <div class="font-extrabold text-sm text-rose-900">Register as Voluntary Blood Donor</div>
+          <input id="donor-name" type="text" required placeholder="Full Name" class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white" />
+          <div class="grid grid-cols-2 gap-2">
+            <select id="donor-group" class="px-3 py-2 rounded-xl border border-slate-300 bg-white font-bold">
+              <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
+              <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+            </select>
+            <input id="donor-zone" type="text" required placeholder="Sector / Locality" class="px-3 py-2 rounded-xl border border-slate-300 bg-white" />
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold">
+            Add Donor Profile
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       7. EDUCATION & LEARNING CENTERS + AI EDUCATION FINDER
+  ====================================================================== -->
+  <section id="education" class="max-w-7xl mx-auto px-4 py-14 space-y-8">
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+      <div>
+        <span class="text-xs font-extrabold uppercase tracking-wider text-[#247BA0]">Schools, Colleges, Libraries & Skills</span>
+        <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-[#0A2463]">Education & AI Institution Finder</h2>
+      </div>
+
+      <!-- AI Education Finder Controls -->
+      <div class="glass-card p-3 rounded-2xl flex flex-wrap items-center gap-2 text-xs">
+        <span class="font-extrabold text-[#247BA0] px-1">🎓 AI Finder:</span>
+        <select id="edu-level-filter" onchange="renderEducation()" class="px-3 py-1.5 rounded-xl bg-slate-100 font-semibold outline-none">
+          <option value="All">All Levels</option>
+          <option value="School">Schools (Govt & Private)</option>
+          <option value="Higher Ed">Colleges & Universities</option>
+          <option value="Skill">Skill & Digital Centers</option>
+          <option value="Library">Libraries</option>
+        </select>
+        <select id="edu-interest-filter" onchange="renderEducation()" class="px-3 py-1.5 rounded-xl bg-slate-100 font-semibold outline-none">
+          <option value="All">All Interests</option>
+          <option value="STEM & AI">STEM & AI</option>
+          <option value="Vocational & EV">Vocational & EV</option>
+          <option value="Research & Arts">Research & Arts</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="education-grid" class="grid md:grid-cols-2 gap-6"></div>
+  </section>
+
+  <!-- =====================================================================
+       8. PUBLIC SERVICES PORTAL + ONE-CLICK CITIZEN HELPDESK & TRACKER
+  ====================================================================== -->
+  <section id="services" class="bg-slate-100/90 border-y border-slate-200 py-14">
+    <div class="max-w-7xl mx-auto px-4 space-y-10">
+      <div>
+        <span class="text-xs font-extrabold uppercase tracking-wider text-teal-700">Citizen e-Governance</span>
+        <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-[#0A2463]">Public Services Portal & Citizen Helpdesk</h2>
+      </div>
+
+      <!-- 9 Civic Services Grid -->
+      <div id="civic-services-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+      <!-- One-Click Citizen Helpdesk + Smart Complaint Tracker -->
+      <div class="grid lg:grid-cols-12 gap-6">
+        <form id="complaint-form" class="lg:col-span-5 glass-card rounded-2xl p-6 space-y-3.5 text-sm">
+          <h3 class="font-bold text-lg text-[#0A2463]">One-Click Citizen Helpdesk</h3>
+          <p class="text-xs text-slate-500">Submit a complaint and get a reference number (e.g., <code>SC-2026-XXXX</code>).</p>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1">Complaint Category</label>
+            <select id="comp-category" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white">
+              <option>Streetlight Complaint</option>
+              <option>Road Maintenance</option>
+              <option>Water Supply Issue</option>
+              <option>Waste Collection Schedule</option>
+              <option>Electricity / Meter Service</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1">Location / Sector</label>
+            <input id="comp-location" type="text" required placeholder="e.g., Sector 5, Central Park Road" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-slate-600 mb-1">Upload Supporting Image</label>
+            <input id="comp-image" type="file" accept="image/*" class="w-full text-xs text-slate-600 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:bg-sky-100 file:text-sky-900 file:font-bold" />
+            <img id="comp-preview" alt="Uploaded complaint preview" class="hidden mt-2 h-24 rounded-xl object-cover border border-slate-300" />
+          </div>
+
+          <button type="submit" class="w-full py-3 rounded-xl bg-[#0A2463] hover:bg-[#247BA0] text-white font-bold shadow transition">
+            Submit Complaint & Generate ID
+          </button>
+        </form>
+
+        <div class="lg:col-span-7 glass-card rounded-2xl p-6 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h3 class="font-bold text-lg text-[#0A2463]">Smart Complaint Tracker</h3>
+              <p class="text-xs text-slate-500">Filter by status or search reference ID</p>
+            </div>
+            <div class="flex flex-wrap gap-1.5 text-xs">
+              <button onclick="filterComplaints('All')" class="comp-tab px-2.5 py-1 rounded-lg bg-[#0A2463] text-white font-bold">All</button>
+              <button onclick="filterComplaints('Submitted')" class="comp-tab px-2.5 py-1 rounded-lg bg-slate-200 text-slate-700 font-bold">Submitted</button>
+              <button onclick="filterComplaints('In Progress')" class="comp-tab px-2.5 py-1 rounded-lg bg-slate-200 text-slate-700 font-bold">In Progress</button>
+              <button onclick="filterComplaints('Resolved')" class="comp-tab px-2.5 py-1 rounded-lg bg-slate-200 text-slate-700 font-bold">Resolved</button>
+            </div>
+          </div>
+
+          <input id="comp-search" oninput="renderComplaints()" type="text" placeholder="Search by Ref ID (SC-2026-...) or location" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 bg-white text-xs" />
+
+          <div id="complaints-list" class="space-y-3 max-h-80 overflow-y-auto pr-1 text-xs"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       9. EMERGENCY & PUBLIC SAFETY CENTER
+  ====================================================================== -->
+  <section id="emergency" class="bg-gradient-to-br from-[#7f1d1d] via-[#450a0a] to-[#7c2d12] text-white py-14">
+    <div class="max-w-7xl mx-auto px-4 space-y-8">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div class="space-y-2 max-w-2xl">
+          <span class="inline-block px-3 py-1 rounded-full bg-red-500/25 border border-red-300/40 text-red-200 text-xs font-extrabold">
+            PUBLIC SAFETY • DISASTER RESPONSE • SAFE SHELTERS
+          </span>
+          <h2 class="font-display text-2xl sm:text-4xl font-extrabold">Emergency & Public Safety Center</h2>
+          <p class="text-xs sm:text-sm text-red-100/85">
+            Rapid access to Police, Fire, Ambulance, Disaster Management, Emergency Shelters, Flood-Prone Zone monitoring, and SOS dispatch.
+          </p>
+        </div>
+
+        <button onclick="openSosModal()" type="button" class="px-7 py-4 rounded-3xl bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400 text-white font-extrabold text-base sm:text-lg shadow-2xl border-2 border-white/30 transition transform hover:scale-105">
+          🚨 SOS EMERGENCY ALERT
+        </button>
+      </div>
+
+      <!-- Verified Emergency Numbers -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div class="rounded-2xl bg-white/10 border border-white/20 p-4">
+          <div class="text-xs text-red-200 font-semibold">Unified Emergency</div>
+          <div class="text-3xl font-black mt-0.5">112</div>
+          <div class="text-[11px] text-red-100/75 mt-1">Police, Fire & Medical</div>
+        </div>
+        <div class="rounded-2xl bg-white/10 border border-white/20 p-4">
+          <div class="text-xs text-red-200 font-semibold">Police Control</div>
+          <div class="text-3xl font-black mt-0.5">100</div>
+          <div class="text-[11px] text-red-100/75 mt-1">18 Precincts & Patrol</div>
+        </div>
+        <div class="rounded-2xl bg-white/10 border border-white/20 p-4">
+          <div class="text-xs text-orange-200 font-semibold">Fire & Rescue</div>
+          <div class="text-3xl font-black mt-0.5">101</div>
+          <div class="text-[11px] text-red-100/75 mt-1">12 Fire & Hazmat Stations</div>
+        </div>
+        <div class="rounded-2xl bg-white/10 border border-white/20 p-4">
+          <div class="text-xs text-emerald-200 font-semibold">Ambulance & Disaster</div>
+          <div class="text-3xl font-black mt-0.5">108 / 1077</div>
+          <div class="text-[11px] text-red-100/75 mt-1">ALS Fleet & 14 Relief Shelters</div>
+        </div>
+      </div>
+
+      <!-- Emergency Route Finder & Flood/Weather Advisory -->
+      <div class="grid md:grid-cols-2 gap-4 text-xs">
+        <div class="rounded-2xl bg-black/30 border border-orange-400/30 p-4 space-y-2">
+          <div class="font-extrabold text-sm text-orange-300">🧭 Emergency Route Finder</div>
+          <p class="text-red-100/85">Locate nearest evacuation shelter, fire station, or trauma hospital from your current area:</p>
+          <div class="flex gap-2">
+            <select id="em-dest-select" class="flex-1 px-3 py-2 rounded-xl bg-white text-slate-900 font-semibold">
+              <option value="Apex Govt Trauma Hospital (1.8 km via Medical Ave)">Nearest Trauma Hospital</option>
+              <option value="Civic Fire Station #1 (1.2 km via Boulevard)">Nearest Fire Station</option>
+              <option value="Kalam High School Safe Shelter #4 (2.1 km Elevated Zone)">Nearest Safe Evacuation Shelter</option>
+            </select>
+            <button onclick="showEmergencyRoute()" type="button" class="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-400 text-white font-bold">
+              Route
+            </button>
+          </div>
+          <div id="em-route-result" class="text-emerald-300 font-semibold"></div>
+        </div>
+
+        <div class="rounded-2xl bg-black/30 border border-red-400/30 p-4 space-y-1.5">
+          <div class="font-extrabold text-sm text-red-200">🌊 Flood-Prone Zones & Weather Alert</div>
+          <p class="text-red-100/85">• <strong>Low-Lying Canal Ward 6:</strong> Automated sluice gates active; water level normal (42.1m).</p>
+          <p class="text-red-100/85">• <strong>Weather Advisory:</strong> Mild evening showers possible; avoid waterlogged underpasses during heavy bursts.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       10. INTERACTIVE SMART CITY MAP & CROWD MANAGEMENT
+  ====================================================================== -->
+  <section id="map" class="max-w-7xl mx-auto px-4 py-14 space-y-6">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-3">
+      <div>
+        <span class="text-xs font-extrabold uppercase tracking-wider text-[#247BA0]">Geospatial Hub & Crowd Density</span>
+        <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-[#0A2463]">Interactive Smart City Map</h2>
+      </div>
+      <div class="flex flex-wrap items-center gap-2 text-xs">
+        <input id="map-search-input" oninput="renderMapPins()" type="text" placeholder="Search places..." class="px-3 py-1.5 rounded-xl border border-slate-300 bg-white" />
+        <button onclick="toggleEmergencyPinsOnly()" id="btn-em-pins" type="button" class="px-3 py-1.5 rounded-xl bg-red-100 text-red-800 font-bold border border-red-300">
+          🚨 Emergency Only: OFF
+        </button>
+      </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div id="map-category-bar" class="flex flex-wrap gap-1.5 text-xs"></div>
+
+    <div class="grid lg:grid-cols-12 gap-6">
+      <div class="lg:col-span-8 relative h-[410px] rounded-3xl overflow-hidden border-2 border-slate-300 bg-[#081d42] shadow-inner">
+        <div id="city-map-canvas" class="w-full h-full relative" style="background-image: linear-gradient(to right, rgba(56,189,248,0.14) 1px, transparent 1px), linear-gradient(to bottom, rgba(56,189,248,0.14) 1px, transparent 1px); background-size: 38px 38px;">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" class="w-full h-full pointer-events-none">
+            <path d="M 0 76 Q 50 66 100 82" fill="none" stroke="#0EA5E9" strokeWidth="3" strokeOpacity="0.4" />
+            <path d="M 12 18 L 52 50 L 88 28" fill="none" stroke="#38BDF8" strokeWidth="1.2" strokeDasharray="2 1.5" />
+          </svg>
+          <div id="map-pins-container"></div>
+        </div>
+      </div>
+
+      <div id="map-detail-panel" class="lg:col-span-4 glass-card rounded-3xl p-6 flex flex-col justify-between"></div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       11. SMART ENVIRONMENT & SUSTAINABILITY + AI ENVIRONMENTAL ASSISTANT
+  ====================================================================== -->
+  <section id="environment" class="bg-gradient-to-br from-[#064e3b] via-[#065f46] to-[#0f766e] text-white py-14">
+    <div class="max-w-7xl mx-auto px-4 space-y-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-200">Net-Zero & Eco-Resilience</span>
+          <h2 class="font-display text-2xl sm:text-3xl font-extrabold">Smart Environment & Sustainability</h2>
+        </div>
+        <div class="px-4 py-2.5 rounded-2xl bg-white/15 border border-emerald-300/30">
+          <div class="text-[11px] uppercase text-emerald-200 font-bold">Green City Score</div>
+          <div class="text-2xl font-black">88 / 100</div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-7 grid sm:grid-cols-2 gap-4 text-xs">
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-5">
+            <div class="font-bold text-emerald-200">🌬️ Air & Water Quality</div>
+            <div class="text-xl font-extrabold mt-1">AQI 38 • 99.1% Water Safe</div>
+            <div class="w-full h-2 bg-white/20 rounded-full mt-2"><div class="h-full bg-emerald-300 rounded-full" style="width: 89%"></div></div>
+            <p class="text-emerald-100/80 mt-2">Continuous sensor stations across 24 wards.</p>
+          </div>
+
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-5">
+            <div class="font-bold text-amber-200">☀️ Solar Power Stations</div>
+            <div class="text-xl font-extrabold mt-1">385 MW Capacity</div>
+            <div class="w-full h-2 bg-white/20 rounded-full mt-2"><div class="h-full bg-amber-300 rounded-full" style="width: 76%"></div></div>
+            <p class="text-emerald-100/80 mt-2">Solar canopies over metro depots & civic buildings.</p>
+          </div>
+
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-5">
+            <div class="font-bold text-teal-200">♻️ Recycling & Waste Hubs</div>
+            <div class="text-xl font-extrabold mt-1">6 Material Recovery Plants</div>
+            <div class="w-full h-2 bg-white/20 rounded-full mt-2"><div class="h-full bg-teal-300 rounded-full" style="width: 91%"></div></div>
+            <p class="text-emerald-100/80 mt-2">Bio-CNG composting & circular e-waste drives.</p>
+          </div>
+
+          <div class="rounded-2xl bg-white/10 border border-white/15 p-5">
+            <div class="font-bold text-lime-200">🌳 Tree Plantation & Parks</div>
+            <div class="text-xl font-extrabold mt-1">142 Parks • 420k+ Trees</div>
+            <div class="w-full h-2 bg-white/20 rounded-full mt-2"><div class="h-full bg-lime-300 rounded-full" style="width: 84%"></div></div>
+            <p class="text-emerald-100/80 mt-2">QR-monitored native afforestation belts.</p>
+          </div>
+        </div>
+
+        <!-- AI Environmental Assistant -->
+        <div class="lg:col-span-5 rounded-2xl bg-white text-slate-900 p-6 space-y-4">
+          <div class="text-xs font-extrabold uppercase text-emerald-700">🌱 AI Environmental Assistant</div>
+          <h3 class="font-bold text-lg text-[#0A2463]">Get Practical Sustainability Tips</h3>
+          <select id="eco-goal-select" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold">
+            <option value="pollution">Reduce Urban Air Pollution & Emissions</option>
+            <option value="water">Save Household & Community Water</option>
+            <option value="waste">Zero-Waste & Recycling at Home</option>
+          </select>
+          <button onclick="generateEcoTips()" type="button" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition">
+            Generate Actionable Tips
+          </button>
+          <div id="eco-tips-box" class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-950 space-y-1.5">
+            <div>• Combine errands into single trips or use Metro + E-Bus feeder routes.</div>
+            <div>• Keep indoor air-purifying native plants and avoid open biomass burning.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       12. CITY NEWS ("WHAT'S HAPPENING IN OUR CITY?") & ABOUT THE CITY
+  ====================================================================== -->
+  <section class="max-w-7xl mx-auto px-4 py-14 space-y-14">
+    <div>
+      <span class="text-xs font-extrabold uppercase tracking-wider text-[#247BA0]">Official Bulletins & Events</span>
+      <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-[#0A2463] mb-6">What's Happening in Our City?</h2>
+      <div id="news-grid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5"></div>
+    </div>
+
+    <!-- About the City -->
+    <div id="about" class="glass-card rounded-3xl p-6 sm:p-10 space-y-4">
+      <span class="text-xs font-extrabold uppercase tracking-wider text-teal-700">History, Vision & Transformation</span>
+      <h2 class="font-display text-2xl sm:text-3xl font-extrabold text-[#0A2463]">About Smart City</h2>
+      <p class="text-sm text-slate-600 leading-relaxed max-w-4xl">
+        Evolving from a historic regional trade and river-port hub into a modern sustainable metropolis, <strong>SMART CITY – Intelligent Living, Better Tomorrow</strong> integrates smart transit, clean solar grids, digital healthcare, e-governance, and citizen participation to deliver high quality of life and climate resilience.
+      </p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2 text-xs">
+        <div class="p-4 rounded-2xl bg-slate-100">
+          <div class="font-extrabold text-[#0A2463] text-sm">Our Mission</div>
+          <p class="text-slate-600 mt-1">Deliver transparent, inclusive, and technology-enabled civic services to every citizen.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-100">
+          <div class="font-extrabold text-[#0A2463] text-sm">Infrastructure Growth</div>
+          <p class="text-slate-600 mt-1">4 Metro corridors, 1,240 km optical fiber, and smart flood-resilient drainage.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-100">
+          <div class="font-extrabold text-[#0A2463] text-sm">Digital Transformation</div>
+          <p class="text-slate-600 mt-1">Unified Citizen ID wallet, online certificates, and real-time complaint tracking.</p>
+        </div>
+        <div class="p-4 rounded-2xl bg-slate-100">
+          <div class="font-extrabold text-[#0A2463] text-sm">Future Projects</div>
+          <p className="text-slate-600 mt-1">Phase-4 Metro expansion, Green Hydrogen transit pilot, and Urban Forest Ring.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       13. CONTACT & FOOTER
+  ====================================================================== -->
+  <footer id="contact" class="bg-[#0A2463] text-slate-200 mt-auto border-t border-sky-400/20">
+    <div class="max-w-7xl mx-auto px-4 py-12 grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-xs sm:text-sm">
+      <div class="space-y-2">
+        <div class="font-display font-extrabold text-white text-lg">SMART CITY PORTAL</div>
+        <p class="text-xs text-sky-200/80">ICCC Building, Civic Center, Sector 1, Smart City – 500081</p>
+        <p class="text-xs text-sky-200">Support: <strong>1800-425-7627</strong> • <strong>care@smartcity.gov.in</strong></p>
+        <div class="flex gap-2 pt-2 text-xs">
+          <button onclick="openInfoModal('Social Channels', 'Follow @SmartCityPortal on X, YouTube, and LinkedIn for official city briefings.')" class="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20">Social</button>
+          <button onclick="openInfoModal('Emergency Contacts', 'Emergency: 112 | Police: 100 | Fire: 101 | Ambulance: 108 | Disaster: 1077')" class="px-2.5 py-1 rounded bg-red-600/80 hover:bg-red-600 font-bold">Emergency Info</button>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white mb-3">Quick Links</h4>
+        <ul class="space-y-1.5 text-xs text-sky-200/80">
+          <li><a href="#dashboard" class="hover:text-white">Live City Dashboard</a></li>
+          <li><a href="#transport" class="hover:text-white">AI Route Planner & Transit</a></li>
+          <li><a href="#healthcare" class="hover:text-white">Hospitals & Blood Donors</a></li>
+          <li><a href="#services" class="hover:text-white">Citizen Helpdesk</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white mb-3">Policies & Governance</h4>
+        <ul class="space-y-1.5 text-xs text-sky-200/80">
+          <li><button onclick="openInfoModal('Frequently Asked Questions', 'Q: How do I track complaints? A: Use your SC-2026-XXXX ID in the Complaint Tracker. Q: Is data live? A: Simulated demonstration data is clearly labeled.')" class="hover:text-white">Frequently Asked Questions (FAQ)</button></li>
+          <li><button onclick="openInfoModal('Privacy Policy', 'Citizen account preferences are stored locally in your session/browser; personal data is protected under civic privacy norms.')" class="hover:text-white">Privacy Policy</button></li>
+          <li><button onclick="openInfoModal('Terms and Conditions', 'Use this portal responsibly. Always dial 112/108/101/100 for genuine life-safety emergencies.')" class="hover:text-white">Terms and Conditions</button></li>
+          <li><button onclick="openInfoModal('Accessibility Statement', 'Supports High Contrast mode, text scaling (A+), keyboard navigation, multilingual labels, and voice prompts.')" class="hover:text-white">Accessibility Statement</button></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="font-bold text-white mb-3">Send Citizen Feedback</h4>
+        <form onsubmit="handleContactSubmit(event)" class="space-y-2 text-xs">
+          <input type="text" required placeholder="Your Name" class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/15 text-white placeholder-sky-200/60" />
+          <input type="text" required placeholder="Message or inquiry..." class="w-full px-3 py-2 rounded-xl bg-white/10 border border-white/15 text-white placeholder-sky-200/60" />
+          <button type="submit" class="w-full py-2 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-bold">Send Message</button>
+          <div id="contact-feedback" class="text-emerald-300 font-semibold"></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 py-4 px-4 text-center text-xs font-semibold text-sky-300">
+      SMART CITY – Technology for People, Progress for Everyone.
+    </div>
+  </footer>
+
+  <!-- =====================================================================
+       14. FLOATING CITYBOT AI ASSISTANT (WITH VOICE INPUT)
+  ====================================================================== -->
+  <div class="fixed bottom-5 right-5 z-50">
+    <div id="citybot-panel" class="hidden w-[330px] sm:w-[370px] rounded-3xl bg-white text-slate-900 shadow-2xl border border-slate-200 overflow-hidden mb-3">
+      <div class="bg-gradient-to-r from-[#0A2463] to-[#247BA0] text-white p-4 flex items-center justify-between">
+        <div>
+          <div class="font-extrabold text-sm">🤖 CITYBOT – Your Smart City Assistant</div>
+          <div class="text-[11px] text-sky-200">Routes • Hospitals • Services • Voice Ready</div>
+        </div>
+        <button onclick="toggleCitybot()" type="button" class="p-1 rounded-lg hover:bg-white/15">✕</button>
+      </div>
+
+      <div id="citybot-messages" class="p-3.5 h-64 overflow-y-auto space-y-2.5 bg-slate-50 text-xs">
+        <div class="p-3 rounded-2xl bg-white border border-slate-200 text-slate-800">
+          Hello! I am CITYBOT. Ask me for metro timings, nearest hospitals, EV parking, property tax info, or emergency guidance.
+        </div>
+      </div>
+
+      <div class="px-3 py-2 bg-white border-t border-slate-100 flex gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+        <button onclick="askCitybot('Nearest hospital')" type="button" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 font-semibold">Nearest Hospital</button>
+        <button onclick="askCitybot('Metro & bus routes')" type="button" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 font-semibold">Metro Routes</button>
+        <button onclick="askCitybot('Parking & EV charging')" type="button" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-sky-50 text-sky-800 font-semibold">EV Parking</button>
+        <button onclick="askCitybot('Emergency numbers')" type="button" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-red-50 text-red-700 font-semibold">Emergency</button>
+      </div>
+
+      <form id="citybot-form" class="p-2.5 bg-white border-t border-slate-200 flex items-center gap-1.5">
+        <button id="btn-voice" onclick="startVoiceInput()" type="button" title="Voice Input" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold">🎤</button>
+        <input id="citybot-input" type="text" placeholder="Ask CITYBOT..." class="flex-1 px-3 py-2 rounded-xl border border-slate-300 text-xs outline-none focus:border-sky-500" />
+        <button type="submit" class="px-3 py-2 rounded-xl bg-[#0A2463] text-white text-xs font-bold">Send</button>
+      </form>
+    </div>
+
+    <button onclick="toggleCitybot()" type="button" class="ml-auto flex items-center gap-2 px-4 py-3.5 rounded-full bg-gradient-to-r from-[#0A2463] to-[#247BA0] hover:opacity-95 text-white font-bold text-xs sm:text-sm shadow-2xl border border-sky-300/40 transition transform hover:scale-105">
+      <span>🤖 CITYBOT</span>
+    </button>
+  </div>
+
+  <!-- =====================================================================
+       MODALS & DRAWERS (SOS, CITIZEN DASHBOARD, BOOKING, SEARCH, NOTIF, INFO)
+  ====================================================================== -->
+
+  <!-- SOS Emergency Modal -->
+  <div id="sos-modal" class="hidden fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white text-slate-900 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border-2 border-red-600">
+      <div class="bg-red-600 text-white p-4 flex items-center justify-between">
+        <span class="font-extrabold text-base sm:text-lg">🚨 EMERGENCY SOS INTERFACE</span>
+        <button onclick="closeSosModal()" type="button" class="font-bold px-2">✕</button>
+      </div>
+      <div class="p-5 space-y-4 text-xs sm:text-sm">
+        <div class="p-3 rounded-xl bg-red-50 border border-red-200 text-red-950 text-xs">
+          <strong>Emergency Numbers:</strong> 112 (Unified) • 100 (Police) • 101 (Fire) • 108 (Ambulance). Nearest Facility: <strong>Apex Govt Trauma Hospital (1.8 km)</strong>.
+        </div>
+        <div>
+          <label class="block text-xs font-bold mb-1">Emergency Instructions</label>
+          <p class="text-xs text-slate-600 bg-slate-100 p-3 rounded-xl">
+            Stay calm, move to a safe open/elevated spot away from traffic or hazards, keep your phone line free, and confirm location sharing below if you want the command desk to receive your coordinates.
+          </p>
+        </div>
+        <label class="flex items-start gap-2.5 p-3 rounded-xl border border-slate-200 cursor-pointer text-xs">
+          <input id="sos-consent-check" type="checkbox" class="mt-0.5" />
+          <span><strong>User Consent:</strong> Share my approximate location with Smart City Emergency Response.</span>
+        </label>
+        <div id="sos-confirm-box" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-semibold">
+          ✓ SOS Alert Confirmed & Logged (Ref #SOS-2026-409). For immediate life-threatening emergencies, also call 112 directly.
+        </div>
+        <div class="flex gap-2">
+          <button onclick="confirmSosDispatch()" type="button" class="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-extrabold text-xs sm:text-sm">
+            Confirm & Dispatch SOS Alert
+          </button>
+          <button onclick="closeSosModal()" type="button" class="px-4 py-3 rounded-xl bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth / Citizen Dashboard Modal -->
+  <div id="citizen-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white text-slate-900 rounded-3xl max-w-xl w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 id="citizen-modal-title" class="font-display font-extrabold text-lg text-[#0A2463]">Citizen Login / Register</h3>
+        <button onclick="closeCitizenModal()" type="button" class="font-bold">✕</button>
+      </div>
+
+      <!-- Login / Register Form View -->
+      <div id="auth-form-view" class="space-y-4 text-sm">
+        <div class="flex gap-2 text-xs">
+          <button id="tab-login" onclick="switchAuthTab('login')" type="button" class="px-3.5 py-1.5 rounded-xl bg-[#0A2463] text-white font-bold">Login</button>
+          <button id="tab-register" onclick="switchAuthTab('register')" type="button" class="px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold">Register Citizen Account</button>
+        </div>
+        <form onsubmit="handleCitizenLogin(event)" class="space-y-3">
+          <input id="auth-name" type="text" placeholder="Full Name" class="hidden w-full px-3.5 py-2.5 rounded-xl border border-slate-300" />
+          <input id="auth-email" type="email" required value="citizen@smartcity.gov.in" placeholder="Email Address" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300" />
+          <input type="password" required value="SmartCity@2026" placeholder="Password" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300" />
+          <button type="submit" class="w-full py-3 rounded-xl bg-[#0A2463] hover:bg-[#247BA0] text-white font-bold">
+            Continue to Smart Citizen Dashboard
+          </button>
+        </form>
+      </div>
+
+      <!-- Logged-in Citizen Dashboard View -->
+      <div id="citizen-dashboard-view" class="hidden space-y-4 text-xs">
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-[#0A2463] to-[#247BA0] text-white flex items-center justify-between">
+          <div>
+            <div class="font-extrabold text-base" id="cd-user-name">Aarav Sharma</div>
+            <div class="text-sky-200" id="cd-user-email">citizen@smartcity.gov.in • ID: SC-88412</div>
+          </div>
+          <button onclick="handleCitizenLogout()" type="button" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 font-bold">Logout</button>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="p-3.5 rounded-2xl bg-slate-100">
+            <div class="font-bold text-[#0A2463] mb-1">⭐ Saved Favorite Locations</div>
+            <ul id="cd-saved-places" class="list-disc pl-4 text-slate-700 space-y-0.5">
+              <li>Central Metro Interchange</li>
+              <li>Apex Govt Trauma Hospital</li>
+            </ul>
+          </div>
+          <div class="p-3.5 rounded-2xl bg-slate-100">
+            <div class="font-bold text-[#0A2463] mb-1">🚆 Transit & Emergency Contacts</div>
+            <p class="text-slate-700">Mode: Metro + E-Bus • Pass: Active</p>
+            <p class="text-slate-700 mt-1">Emergency Contact: +91-98765-43210</p>
+          </div>
+        </div>
+
+        <div class="p-3.5 rounded-2xl border border-slate-200">
+          <div class="font-bold text-[#0A2463] mb-1">📄 Service Application History & Alerts</div>
+          <p class="text-slate-600">• Property Tax Assessment Receipt (#PT-2026-119) — Paid</p>
+          <p class="text-slate-600">• Smart Transit Monthly Pass — Renewed</p>
+          <p class="text-slate-600">• Alert: Mild evening showers forecast; plan travel accordingly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hospital Appointment & Ambulance Modal -->
+  <div id="health-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+    <div class="bg-white text-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 text-sm">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 id="health-modal-title" class="font-extrabold text-[#0A2463]">Hospital Service</h3>
+        <button onclick="closeHealthModal()" type="button" class="font-bold">✕</button>
+      </div>
+      <div id="health-modal-body" class="space-y-3 text-xs"></div>
+    </div>
+  </div>
+
+  <!-- Global Search Modal -->
+  <div id="search-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-start justify-center pt-20 p-4">
+    <div class="bg-white text-slate-900 rounded-3xl max-w-lg w-full p-5 shadow-2xl space-y-3">
+      <div class="flex items-center gap-2 border-b pb-3">
+        <span>🔍</span>
+        <input id="global-search-input" oninput="runGlobalSearch()" type="text" placeholder="Search hospitals, schools, routes, services..." class="flex-1 text-sm outline-none" />
+        <button onclick="closeSearchModal()" type="button" class="font-bold">✕</button>
+      </div>
+      <div id="global-search-results" class="space-y-1.5 max-h-64 overflow-y-auto text-xs"></div>
+    </div>
+  </div>
+
+  <!-- Notification Drawer -->
+  <div id="notif-drawer" class="hidden fixed top-20 right-4 z-50 w-80 sm:w-96 rounded-2xl bg-white text-slate-900 shadow-2xl border border-slate-200 p-4 space-y-2.5 text-xs">
+    <div class="flex items-center justify-between border-b pb-2">
+      <span class="font-extrabold text-sm text-[#0A2463]">🔔 Smart Notification Center</span>
+      <button onclick="toggleNotifDrawer()" type="button" class="font-bold">✕</button>
+    </div>
+    <div class="p-2.5 rounded-xl bg-orange-50 border border-orange-200">
+      <div class="font-bold text-orange-900">Traffic & Road Alert</div>
+      <p class="text-orange-800">East Ring Flyover Lane-2 maintenance active until 19:00.</p>
+    </div>
+    <div class="p-2.5 rounded-xl bg-sky-50 border border-sky-200">
+      <div class="font-bold text-sky-900">Weather & Air Quality</div>
+      <p class="text-sky-800">AQI at 38 (Good) • Temp 27°C • Pleasant evening breeze.</p>
+    </div>
+    <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200">
+      <div class="font-bold text-emerald-900">Public Announcement</div>
+      <p class="text-emerald-800">New Electric Feeder Buses added on Metro Blue Line.</p>
+    </div>
+  </div>
+
+  <!-- General Info Modal (FAQ / Privacy / Terms / Accessibility / News) -->
+  <div id="info-modal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+    <div class="bg-white text-slate-900 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-3">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 id="info-modal-title" class="font-extrabold text-base text-[#0A2463]">Information</h3>
+        <button onclick="closeInfoModal()" type="button" class="font-bold">✕</button>
+      </div>
+      <p id="info-modal-body" class="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line"></p>
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       APPLICATION DATA & INTERACTIVE JAVASCRIPT LOGIC
+  ====================================================================== -->
+  <script>
+    // Multilingual Copy
+    const I18N = {
+      en: {
+        brand: 'SMART CITY',
+        tagline: 'Intelligent Living, Better Tomorrow',
+        liveStatus: 'LIVE CITY GRID: OPERATIONAL (99.8% UPTIME)',
+        heroTitle: 'WELCOME TO THE SMART CITY OF TOMORROW',
+        heroSub: 'Connecting People, Technology, and Innovation for a Better Future.'
+      },
+      hi: {
+        brand: 'स्मार्ट सिटी',
+        tagline: 'बुद्धिमान जीवन, बेहतर कल',
+        liveStatus: 'लाइव सिटी ग्रिड: सक्रिय (99.8% अपटाइम)',
+        heroTitle: 'कल के स्मार्ट शहर में आपका स्वागत है',
+        heroSub: 'बेहतर भविष्य के लिए लोगों, प्रौद्योगिकी और नवाचार को जोड़ना।'
+      },
+      te: {
+        brand: 'స్మార్ట్ సిటీ',
+        tagline: 'తెలివైన జీవనం, మెరుగైన రేపు',
+        liveStatus: 'లైవ్ సిటీ గ్రిడ్: పనిచేస్తోంది (99.8% అప్‌టైమ్)',
+        heroTitle: 'రేపటి స్మార్ట్ సిటీకి స్వాగతం',
+        heroSub: 'మెరుగైన భవిష్యత్తు కోసం ప్రజలు, సాంకేతికత మరియు ఆవిష్కరణలను అనుసంధానించడం.'
+      }
+    };
+
+    const OVERVIEW_METRICS = [
+      { label: 'Total Population', value: 1482900, suffix: '', icon: '👥', note: '+1.8% annual growth' },
+      { label: 'Smart Traffic Flow', value: 86, suffix: '%', icon: '🚦', note: 'AI signal sync active' },
+      { label: 'Number of Hospitals', value: 64, suffix: '', icon: '🏥', note: '18 emergency centers' },
+      { label: 'Schools & Colleges', value: 312, suffix: '', icon: '🎓', note: 'Smart digital campuses' },
+      { label: 'Public Transport', value: 97, suffix: '%', icon: '🚆', note: 'Metro + E-Bus network' },
+      { label: 'Green Spaces', value: 35, suffix: '%', icon: '🌳', note: '142 parks & green belts' },
+      { label: 'Renewable Energy', value: 63, suffix: '%', icon: '☀️', note: '385 MW solar grid' },
+      { label: 'Daily Water Supply', value: 215, suffix: ' MLD', icon: '💧', note: '99.1% quality tested' }
+    ];
+
+    const TRANSIT_ITEMS = [
+      { line: 'Blue Line Metro', corridor: 'Airport ↔ Tech Valley', eta: 'Every 4 mins • Next in 2m', status: 'On Time' },
+      { line: 'Green Line Metro', corridor: 'Central Hub ↔ Knowledge City', eta: 'Every 5 mins • Next in 4m', status: 'On Time' },
+      { line: 'E-Bus Route 101', corridor: 'Civic Center ↔ Greenbelt Ring', eta: 'Every 8 mins • Next in 6m', status: 'Active' },
+      { line: 'E-Bus Route 204', corridor: 'Medical District ↔ Harbor', eta: 'Every 10 mins • Next in 3m', status: 'Active' }
+    ];
+
+    const PARKING_ITEMS = [
+      { name: 'Central Plaza Smart Deck', spots: '142 / 400 free', rate: '₹20/hr', ev: '18 EV Chargers' },
+      { name: 'Tech Corridor EV Hub', spots: '64 / 350 free', rate: '₹30/hr', ev: '24 Fast Chargers' },
+      { name: 'Riverfront Eco Parking', spots: '185 / 250 free', rate: '₹15/hr', ev: '10 EV Chargers' },
+      { name: 'Metro Park & Ride North', spots: '52 / 500 free', rate: '₹10/hr', ev: '20 EV Chargers' }
+    ];
+
+    const HOSPITALS = [
+      {
+        name: 'Apex Government General & Trauma Hospital',
+        category: 'Government',
+        location: 'Sector 4, Medical Avenue',
+        phone: '+91-40-2345-1100',
+        beds: '48 General • 9 ICU (Sample)',
+        services: ['24/7 Trauma', 'Cardiology', 'Emergency Care', 'Blood Bank', 'Pharmacy']
+      },
+      {
+        name: 'Horizon Private Multi-Specialty Hospital',
+        category: 'Private',
+        location: 'Tech Corridor, Zone 2',
+        phone: '+91-40-2345-8822',
+        beds: '31 General • 6 ICU (Sample)',
+        services: ['Robotic Surgery', 'Neurology', 'Diagnostics Lab', '24/7 Pharmacy']
+      },
+      {
+        name: 'City Rapid Emergency & Burn Care Center',
+        category: 'Emergency',
+        location: 'East Ring Junction',
+        phone: '+91-40-2345-9900',
+        beds: '19 Critical Beds (Sample)',
+        services: ['Emergency Care', 'Ambulance Dispatch', 'Burns & Trauma']
+      },
+      {
+        name: 'Lifeline Regional Blood Bank & Medical Lab',
+        category: 'Blood',
+        location: 'Civic Square, Block B',
+        phone: '+91-40-2345-4411',
+        beds: 'All Blood Groups Ready (Sample)',
+        services: ['Blood Bank', 'Pathology & MRI Lab', '24/7 Testing']
+      }
+    ];
+
+    let DONORS = [
+      { name: 'Kavitha Nair', group: 'O-', zone: 'Sector 4' },
+      { name: 'Rohit Verma', group: 'B+', zone: 'Tech Corridor' },
+      { name: 'Farhan Siddiqui', group: 'A+', zone: 'Civic Square' },
+      { name: 'Deepika Rao', group: 'AB+', zone: 'Greenbelt South' }
+    ];
+
+    const INSTITUTIONS = [
+      {
+        name: 'National Institute of Smart Urban Technology',
+        level: 'Higher Ed',
+        interest: 'STEM & AI',
+        badge: 'University',
+        address: '100 Innovation Blvd, Knowledge City',
+        courses: 'B.Tech AI & Robotics, Urban Data Science, Clean Energy',
+        facilities: 'AI Research Labs, Central Library, Startup Hub',
+        contact: 'admissions@nisut.edu.in',
+        url: '#education'
+      },
+      {
+        name: 'Kalam Model Government & Digital School',
+        level: 'School',
+        interest: 'STEM & AI',
+        badge: 'Government School',
+        address: '45 Vidya Marg, Sector 7',
+        courses: 'Classes 1–12 • Smart STEM & Coding Curriculum',
+        facilities: 'Smart Classrooms, Robotics Lab, Sports Ground',
+        contact: 'kalam.school@smartcity.gov.in',
+        url: '#education'
+      },
+      {
+        name: 'Metro Skill & EV Technician Academy',
+        level: 'Skill',
+        interest: 'Vocational & EV',
+        badge: 'Skill Development Center',
+        address: 'Plot 18, Skill Park East',
+        courses: 'EV Maintenance, Solar PV Tech, Digital Office Ops',
+        facilities: 'Hands-on Workshops, Placement Cell, Digital Lab',
+        contact: 'skills@smartcity.gov.in',
+        url: '#education'
+      },
+      {
+        name: 'Central Digital Knowledge Library',
+        level: 'Library',
+        interest: 'Research & Arts',
+        badge: 'Public & Digital Library',
+        address: 'Cultural Plaza, Civic Center',
+        courses: '200,000+ E-Books, Research Journals, Coding & Reading Clubs',
+        facilities: 'High-Speed Wi-Fi, Quiet Pods, Audio/Braille Desks',
+        contact: 'library@smartcity.gov.in',
+        url: '#education'
+      }
+    ];
+
+    const CIVIC_SERVICES = [
+      { title: 'Water Supply Services', info: 'Apply for new smart water connections, pay monthly bills, or report pipe leaks.' },
+      { title: 'Electricity Services', info: 'Check smart meter usage, apply for rooftop solar net-metering, or pay bills.' },
+      { title: 'Property Tax Information', info: 'Calculate ward property tax, download receipts, and update ownership.' },
+      { title: 'Waste Collection Schedules', info: 'View daily wet/dry/e-waste pickup timings by sector and smart bin status.' },
+      { title: 'Streetlight Complaints', info: 'Report non-working LED streetlights for automated ward maintenance.' },
+      { title: 'Road Maintenance', info: 'Log potholes, damaged footpaths, or road markings for rapid repair.' },
+      { title: 'Birth & Death Certificates', info: 'Apply for and verify digital birth or death certificates online.' },
+      { title: 'Public Transport Passes', info: 'Recharge unified smart mobility cards for Metro and Electric Buses.' },
+      { title: 'Online Service Applications', info: 'Apply for trade licenses, park bookings, and citizen welfare schemes.' }
+    ];
+
+    let COMPLAINTS = [
+      { id: 'SC-2026-1042', category: 'Streetlight Complaint', location: 'Sector 4, Lake View Road', status: 'Resolved', date: '2026-11-20' },
+      { id: 'SC-2026-1088', category: 'Road Maintenance', location: 'East Ring Service Road', status: 'In Progress', date: '2026-11-22' },
+      { id: 'SC-2026-1115', category: 'Waste Collection Schedule', location: 'Greenbelt Block C', status: 'Submitted', date: '2026-11-24' }
+    ];
+
+    const MAP_PINS = [
+      { id: 1, name: 'Apex Govt Trauma Hospital', cat: 'Hospitals', emergency: true, x: 26, y: 34, crowd: 'Moderate', info: '24/7 Trauma, OPD & Emergency Care • Sector 4' },
+      { id: 2, name: 'Horizon Private Hospital', cat: 'Hospitals', emergency: true, x: 74, y: 38, crowd: 'Low', info: 'Multi-Specialty & Diagnostics Lab • Tech Corridor' },
+      { id: 3, name: 'Kalam Model School', cat: 'Schools', emergency: false, x: 35, y: 64, crowd: 'Normal', info: 'Digital K-12 School & Safe Shelter • Sector 7' },
+      { id: 4, name: 'NISUT Smart University', cat: 'Colleges', emergency: false, x: 78, y: 24, crowd: 'Normal', info: 'Engineering, AI & Research Campus • Knowledge City' },
+      { id: 5, name: 'Central Metro Interchange', cat: 'Metro', emergency: false, x: 50, y: 48, crowd: 'High (78%)', info: 'Blue & Green Metro Lines + Bus Hub' },
+      { id: 6, name: 'Riverfront E-Bus Stop', cat: 'Bus Stops', emergency: false, x: 62, y: 72, crowd: 'Moderate', info: 'Electric Bus Routes 101 & 204' },
+      { id: 7, name: 'Civic Police Precinct #1', cat: 'Police', emergency: true, x: 42, y: 28, crowd: 'Low', info: '24/7 Police & Cyber Helpdesk' },
+      { id: 8, name: 'Central Fire & Rescue #1', cat: 'Fire', emergency: true, x: 20, y: 54, crowd: 'Low', info: 'Fire Tenders & Disaster Response Unit' },
+      { id: 9, name: 'Botanical Eco-Park', cat: 'Parks', emergency: false, x: 68, y: 62, crowd: 'Low (28%)', info: 'Green Park, Walking Trails & AQI Station' },
+      { id: 10, name: 'Civic Plaza Mall', cat: 'Shopping', emergency: false, x: 56, y: 34, crowd: 'Moderate', info: 'Shopping, Dining & Public Restrooms' },
+      { id: 11, name: 'Tech Corridor EV Station', cat: 'EV Charging', emergency: false, x: 84, y: 54, crowd: 'Normal', info: '24 DC Fast EV Chargers Available' },
+      { id: 12, name: 'Central Plaza Smart Parking', cat: 'Parking', emergency: false, x: 46, y: 68, crowd: 'Moderate', info: '142 Parking Slots Open • ₹20/hr' }
+    ];
+
+    const NEWS_LIST = [
+      { tag: 'Infrastructure', date: 'Nov 22, 2026', title: 'Electric Feeder Bus Fleet Expands Across 14 Metro Stations', body: 'Sixty-five zero-emission electric feeder buses are now operating to improve last-mile connectivity with live arrival tracking.' },
+      { tag: 'Weather Warning', date: 'Nov 24, 2026', title: 'Evening Rain Advisory & Smart Drainage Readiness Check', body: 'Municipal sensors confirm storm drains are clear; commuters are advised to allow extra travel time during evening showers.' },
+      { tag: 'Government', date: 'Nov 20, 2026', title: 'Online Birth, Death & Property Tax Services Streamlined', body: 'Citizens can submit applications, pay property tax, and download verified digital certificates through the Public Services Portal.' },
+      { tag: 'Community Event', date: 'Nov 28, 2026', title: 'Weekend Tree Plantation & Clean Park Drive Announced', body: 'Residents, students, and civic groups are invited to join the Saturday morning plantation initiative across Sector parks.' }
+    ];
+
+    // State Variables
+    let currentHospitalFilter = 'All';
+    let currentComplaintFilter = 'All';
+    let currentMapCategory = 'All';
+    let emergencyPinsOnly = false;
+    let selectedMapPin = MAP_PINS[0];
+    let selectedRouteMode = 'transit';
+    let citizenUser = null;
+
+    // Initialize App on DOM Ready
+    document.addEventListener('DOMContentLoaded', () => {
+      renderOverview();
+      renderTransitAndParking();
+      renderHospitals();
+      renderDonors();
+      renderEducation();
+      renderCivicServices();
+      renderComplaints();
+      renderMapCategories();
+      renderMapPins();
+      renderNews();
+      initCharts();
+      setupEventListeners();
+    });
+
+    function setupEventListeners() {
+      // Language selector
+      document.getElementById('lang-select').addEventListener('change', (e) => {
+        const dict = I18N[e.target.value] || I18N.en;
+        document.getElementById('t-brand').textContent = dict.brand;
+        document.getElementById('t-tagline').textContent = dict.tagline;
+        document.getElementById('t-live-status').textContent = dict.liveStatus;
+        document.getElementById('t-hero-title').textContent = dict.heroTitle;
+        document.getElementById('t-hero-sub').textContent = dict.heroSub;
+      });
+
+      // Accessibility toggles
+      document.getElementById('btn-contrast').addEventListener('click', () => {
+        document.body.classList.toggle('high-contrast');
+      });
+      document.getElementById('btn-font').addEventListener('click', () => {
+        document.body.classList.toggle('large-text');
+      });
+
+      // Route mode tabs
+      document.querySelectorAll('.route-mode-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          selectedRouteMode = btn.dataset.mode;
+          document.querySelectorAll('.route-mode-btn').forEach((b) => {
+            b.className = 'route-mode-btn py-2 px-2 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold';
+          });
+          btn.className = 'route-mode-btn py-2 px-2 rounded-xl bg-[#0A2463] text-white text-xs font-bold';
+        });
+      });
+
+      // Route planner form
+      document.getElementById('route-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const origin = document.getElementById('route-origin').value.trim();
+        const dest = document.getElementById('route-dest').value.trim();
+        const profiles = {
+          transit: { mode: 'Public Transport (Metro + E-Bus)', time: '18 mins', dist: '9.4 km', fare: '₹25', alt: 'Route B via Express E-Bus 204 (24 mins)', alert: 'On schedule; minor crowd at Central Interchange.' },
+          driving: { mode: 'Driving (Smart Signal Corridor)', time: '21 mins', dist: '10.2 km', fare: 'Est. ₹60 fuel/EV', alt: 'Alternative via Riverfront Blvd avoids East Ring work', alert: 'Traffic Alert: East Ring Flyover Lane-2 construction active.' },
+          cycling: { mode: 'Cycling (Green Bike Track)', time: '28 mins', dist: '8.7 km', fare: '₹10 Smart Bike', alt: 'Parkway shaded loop (+4 mins)', alert: 'Dedicated cycle lane clear; pleasant 27°C weather.' },
+          walking: { mode: 'Walking (Pedestrian Path)', time: '1 hr 10 mins', dist: '6.1 km', fare: 'Free', alt: 'Skywalk & Botanical Trail', alert: 'Good air quality (38 AQI) along route.' }
+        };
+        const p = profiles[selectedRouteMode];
+        document.getElementById('route-output').innerHTML = `
+          <div class="font-extrabold text-[#0A2463] text-sm">${origin} → ${dest}</div>
+          <div class="font-bold text-teal-800">${p.mode} • ${p.time} • ${p.dist} • ${p.fare}</div>
+          <div class="text-slate-700">Alternative Route: ${p.alt}</div>
+          <div class="text-amber-800 font-medium">${p.alert}</div>
+        `;
+      });
+
+      // Blood donor registration
+      document.getElementById('donor-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('donor-name').value.trim();
+        const group = document.getElementById('donor-group').value;
+        const zone = document.getElementById('donor-zone').value.trim();
+        if (!name || !zone) return;
+        DONORS.unshift({ name, group, zone });
+        renderDonors();
+        e.target.reset();
+      });
+
+      // Complaint image preview
+      document.getElementById('comp-image').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        const img = document.getElementById('comp-preview');
+        if (file) {
+          img.src = URL.createObjectURL(file);
+          img.classList.remove('hidden');
+        } else {
+          img.classList.add('hidden');
+        }
+      });
+
+      // Complaint form submission
+      document.getElementById('complaint-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const category = document.getElementById('comp-category').value;
+        const location = document.getElementById('comp-location').value.trim();
+        if (!location) return;
+        const refId = 'SC-2026-' + Math.floor(1200 + Math.random() * 8700);
+        COMPLAINTS.unshift({
+          id: refId,
+          category,
+          location,
+          status: 'Submitted',
+          date: '2026-11-24'
+        });
+        renderComplaints();
+        e.target.reset();
+        document.getElementById('comp-preview').classList.add('hidden');
+      });
+
+      // CITYBOT form
+      document.getElementById('citybot-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const input = document.getElementById('citybot-input');
+        const q = input.value.trim();
+        if (!q) return;
+        askCitybot(q);
+        input.value = '';
+      });
+    }
+
+    // Animated Overview Counters
+    function renderOverview() {
+      const grid = document.getElementById('overview-grid');
+      grid.innerHTML = OVERVIEW_METRICS.map((m, idx) => `
+        <div class="glass-card rounded-2xl p-4 flex items-start justify-between gap-3 hover:shadow-md transition">
+          <div>
+            <div class="text-xs font-semibold text-slate-500">${m.label}</div>
+            <div id="counter-${idx}" class="font-display text-2xl font-extrabold text-[#0A2463] mt-1">0${m.suffix}</div>
+            <div class="text-[11px] text-teal-700 font-semibold mt-1">${m.note}</div>
+          </div>
+          <div class="text-2xl p-2.5 rounded-2xl bg-sky-50">${m.icon}</div>
+        </div>
+      `).join('');
+
+      OVERVIEW_METRICS.forEach((m, idx) => {
+        const el = document.getElementById('counter-' + idx);
+        const steps = 28;
+        let current = 0;
+        const increment = m.value / steps;
+        const timer = setInterval(() => {
+          current += increment;
+          if (current >= m.value) {
+            el.textContent = m.value.toLocaleString() + m.suffix;
+            clearInterval(timer);
+          } else {
+            el.textContent = Math.floor(current).toLocaleString() + m.suffix;
+          }
+        }, 25);
+      });
+    }
+
+    function refreshAllTelemetry() {
+      const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' IST';
+      document.getElementById('dash-last-updated').textContent = nowStr;
+      document.getElementById('overview-timestamp').textContent = 'Updated: ' + nowStr;
+      renderOverview();
+    }
+
+    // Hero Digital Twin Layer Toggle
+    function toggleHeroTwinLayer() {
+      const links = document.getElementById('hero-sensor-links');
+      links.classList.toggle('hidden');
+    }
+
+    // Chart.js Charts
+    function initCharts() {
+      const energyCtx = document.getElementById('energyChart').getContext('2d');
+      new Chart(energyCtx, {
+        type: 'line',
+        data: {
+          labels: ['06:00', '09:00', '12:00', '15:00', '18:00', '21:00'],
+          datasets: [
+            {
+              label: 'Grid Load (MW)',
+              data: [430, 690, 810, 785, 910, 720],
+              borderColor: '#0A2463',
+              backgroundColor: 'rgba(36, 123, 160, 0.18)',
+              fill: true,
+              tension: 0.35
+            },
+            {
+              label: 'Solar Generation (MW)',
+              data: [90, 320, 580, 510, 175, 35],
+              borderColor: '#16A34A',
+              backgroundColor: 'rgba(22, 163, 74, 0.15)',
+              fill: true,
+              tension: 0.35
+            }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+
+      const aqiCtx = document.getElementById('aqiTrendChart').getContext('2d');
+      new Chart(aqiCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          datasets: [
+            {
+              label: 'AQI (Lower is Cleaner)',
+              data: [44, 41, 39, 42, 37, 35, 38],
+              backgroundColor: '#247BA0',
+              borderRadius: 6
+            },
+            {
+              label: 'Cleanliness Score',
+              data: [92, 93, 93, 94, 94, 95, 94],
+              backgroundColor: '#0D9488',
+              borderRadius: 6
+            }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false }
+      });
+    }
+
+    // Transit & Parking Rendering
+    function renderTransitAndParking() {
+      document.getElementById('transit-list').innerHTML = TRANSIT_ITEMS.map((t) => `
+        <div class="py-2.5 flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <span class="font-bold text-[#0A2463]">${t.line}</span>
+            <span class="text-slate-600 ml-2">${t.corridor}</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <span class="text-slate-700 font-medium">${t.eta}</span>
+            <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">${t.status}</span>
+          </div>
+        </div>
+      `).join('');
+
+      document.getElementById('parking-list').innerHTML = PARKING_ITEMS.map((p) => `
+        <div class="p-3 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-between gap-2">
+          <div>
+            <div class="font-bold text-[#0A2463]">${p.name}</div>
+            <div class="text-emerald-700 font-semibold mt-0.5">${p.spots} • ${p.ev}</div>
+          </div>
+          <span class="px-2.5 py-1 rounded-lg bg-white border font-bold text-slate-800">${p.rate}</span>
+        </div>
+      `).join('');
+    }
+
+    // Healthcare Rendering & Booking
+    function filterHospitals(cat) {
+      currentHospitalFilter = cat;
+      renderHospitals();
+    }
+
+    function renderHospitals() {
+      const list = HOSPITALS.filter((h) => currentHospitalFilter === 'All' || h.category === currentHospitalFilter);
+      document.getElementById('hospitals-grid').innerHTML = list.map((h) => `
+        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between gap-4">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-0.5 rounded-full bg-red-100 text-red-800 text-xs font-bold">${h.category}</span>
+              <span class="text-xs font-semibold text-slate-600">${h.phone}</span>
+            </div>
+            <h3 class="font-bold text-base text-[#0A2463] mt-2">${h.name}</h3>
+            <p class="text-xs text-slate-600 mt-0.5">📍 ${h.location} • ${h.beds}</p>
+            <div class="flex flex-wrap gap-1.5 mt-3">
+              ${h.services.map((s) => `<span class="text-[11px] px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-medium">${s}</span>`).join('')}
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-2 pt-3 border-t border-slate-200 text-xs">
+            <button onclick="openBookingModal('${h.name.replace(/'/g, "\\'")}')" type="button" class="px-3.5 py-2 rounded-xl bg-[#0A2463] hover:bg-[#247BA0] text-white font-bold">
+              Book Appointment
+            </button>
+            <a href="#map" onclick="selectPinByName('${h.name.replace(/'/g, "\\'")}')" class="px-3.5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold">
+              Directions & Map
+            </a>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openBookingModal(hospitalName) {
+      document.getElementById('health-modal-title').textContent = 'Book Appointment — ' + hospitalName;
+      document.getElementById('health-modal-body').innerHTML = `
+        <form onsubmit="confirmAppointment(event, '${hospitalName.replace(/'/g, "\\'")}')" class="space-y-3">
+          <input type="text" required placeholder="Patient Full Name" class="w-full px-3 py-2 rounded-xl border border-slate-300" />
+          <input type="date" required class="w-full px-3 py-2 rounded-xl border border-slate-300" />
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-red-600 text-white font-bold">Confirm OPD Slot</button>
+        </form>
+        <div id="booking-result" class="text-emerald-700 font-bold"></div>
+      `;
+      document.getElementById('health-modal').classList.remove('hidden');
+    }
+
+    function confirmAppointment(e, hName) {
+      e.preventDefault();
+      document.getElementById('booking-result').textContent = '✓ Appointment token #OPD-' + Math.floor(100 + Math.random() * 899) + ' reserved at ' + hName + '.';
+    }
+
+    function openAmbulanceModal() {
+      document.getElementById('health-modal-title').textContent = '🚑 Emergency Ambulance Assistance (108)';
+      document.getElementById('health-modal-body').innerHTML = `
+        <p class="text-slate-700">For immediate life-threatening medical emergencies, call <strong>108</strong> or <strong>112</strong> directly.</p>
+        <div class="p-3 rounded-xl bg-orange-50 border border-orange-200 text-orange-950">
+          Nearest ALS Ambulance Base: Sector 4 Trauma Hub (Est. response ~6–8 mins in normal traffic).
+        </div>
+        <button onclick="closeHealthModal()" type="button" class="w-full py-2.5 rounded-xl bg-[#0A2463] text-white font-bold">Close</button>
+      `;
+      document.getElementById('health-modal').classList.remove('hidden');
+    }
+
+    function closeHealthModal() {
+      document.getElementById('health-modal').classList.add('hidden');
+    }
+
+    function renderDonors() {
+      document.getElementById('donor-list').innerHTML = DONORS.map((d) => `
+        <div class="p-3 rounded-xl bg-white border border-slate-200 flex items-center justify-between">
+          <div>
+            <div class="font-bold text-slate-900">${d.name}</div>
+            <div class="text-slate-500">${d.zone}</div>
+          </div>
+          <span class="px-2.5 py-1 rounded-full bg-red-600 text-white font-extrabold">${d.group}</span>
+        </div>
+      `).join('');
+    }
+
+    // Education Finder Rendering
+    function renderEducation() {
+      const lvl = document.getElementById('edu-level-filter').value;
+      const intr = document.getElementById('edu-interest-filter').value;
+      const filtered = INSTITUTIONS.filter((i) => (lvl === 'All' || i.level === lvl) && (intr === 'All' || i.interest === intr));
+      document.getElementById('education-grid').innerHTML = filtered.map((inst) => `
+        <div class="glass-card rounded-2xl p-5 space-y-2.5">
+          <div class="flex items-center justify-between gap-2 text-xs">
+            <span class="px-2.5 py-0.5 rounded-full bg-sky-100 text-[#0A2463] font-bold">${inst.badge}</span>
+            <span class="text-teal-700 font-semibold">${inst.interest}</span>
+          </div>
+          <h3 class="font-bold text-base text-[#0A2463]">${inst.name}</h3>
+          <p class="text-xs text-slate-600">📍 ${inst.address}</p>
+          <p class="text-xs text-slate-700"><strong>Programs:</strong> ${inst.courses}</p>
+          <p class="text-xs text-slate-600"><strong>Facilities:</strong> ${inst.facilities}</p>
+          <div class="pt-2 border-t border-slate-200 flex items-center justify-between text-xs">
+            <span class="text-slate-500">${inst.contact}</span>
+            <button onclick="openInfoModal('${inst.name.replace(/'/g, "\\'")}', 'Address: ${inst.address}\\nPrograms: ${inst.courses}\\nContact: ${inst.contact}')" type="button" class="text-[#247BA0] font-bold hover:underline">
+              Institution Details →
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Civic Services & Complaint Tracker
+    function renderCivicServices() {
+      document.getElementById('civic-services-grid').innerHTML = CIVIC_SERVICES.map((s) => `
+        <div class="glass-card rounded-2xl p-4 flex flex-col justify-between gap-3">
+          <div>
+            <h3 class="font-bold text-sm text-[#0A2463]">${s.title}</h3>
+            <p class="text-xs text-slate-600 mt-1">${s.info}</p>
+          </div>
+          <button onclick="openInfoModal('${s.title.replace(/'/g, "\\'")}', '${s.info.replace(/'/g, "\\'")}\\n\\nSign in with your Citizen Account to apply or pay online.')" type="button" class="text-xs font-bold text-[#247BA0] text-left hover:underline">
+            Access Service →
+          </button>
+        </div>
+      `).join('');
+    }
+
+    function filterComplaints(status) {
+      currentComplaintFilter = status;
+      renderComplaints();
+    }
+
+    function renderComplaints() {
+      const q = (document.getElementById('comp-search').value || '').toLowerCase();
+      const rows = COMPLAINTS.filter((c) => {
+        const matchStatus = currentComplaintFilter === 'All' || c.status === currentComplaintFilter;
+        const matchText = c.id.toLowerCase().includes(q) || c.location.toLowerCase().includes(q) || c.category.toLowerCase().includes(q);
+        return matchStatus && matchText;
+      });
+      document.getElementById('complaints-list').innerHTML = rows.map((c) => {
+        const badgeClass =
+          c.status === 'Resolved'
+            ? 'bg-emerald-100 text-emerald-800'
+            : c.status === 'In Progress'
+            ? 'bg-amber-100 text-amber-800'
+            : 'bg-sky-100 text-sky-800';
+        return `
+          <div class="p-3.5 rounded-xl bg-white border border-slate-200 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <span class="font-mono font-bold text-[#0A2463]">${c.id}</span>
+              <span class="font-bold text-slate-800 ml-2">${c.category}</span>
+              <div class="text-slate-500 mt-0.5">${c.location} • ${c.date}</div>
+            </div>
+            <span class="px-2.5 py-1 rounded-full font-bold ${badgeClass}">${c.status}</span>
+          </div>
+        `;
+      }).join('') || '<div class="text-slate-500 py-4 text-center">No matching complaints found.</div>';
+    }
+
+    // Emergency Route Finder
+    function showEmergencyRoute() {
+      const dest = document.getElementById('em-dest-select').value;
+      document.getElementById('em-route-result').textContent = '✓ Fastest Priority Route: ' + dest;
+    }
+
+    // Interactive City Map
+    function renderMapCategories() {
+      const cats = ['All', 'Hospitals', 'Schools', 'Colleges', 'Metro', 'Bus Stops', 'Police', 'Fire', 'Parks', 'Shopping', 'EV Charging', 'Parking'];
+      document.getElementById('map-category-bar').innerHTML = cats.map((c) => `
+        <button onclick="setMapCategory('${c}')" type="button" class="px-3 py-1.5 rounded-xl font-bold transition ${
+          currentMapCategory === c ? 'bg-[#0A2463] text-white' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+        }">${c}</button>
+      `).join('');
+    }
+
+    function setMapCategory(cat) {
+      currentMapCategory = cat;
+      renderMapCategories();
+      renderMapPins();
+    }
+
+    function toggleEmergencyPinsOnly() {
+      emergencyPinsOnly = !emergencyPinsOnly;
+      const btn = document.getElementById('btn-em-pins');
+      btn.textContent = emergencyPinsOnly ? '🚨 Emergency Only: ON' : '🚨 Emergency Only: OFF';
+      renderMapPins();
+    }
+
+    function renderMapPins() {
+      const q = (document.getElementById('map-search-input').value || '').toLowerCase();
+      const pins = MAP_PINS.filter((p) => {
+        const matchCat = currentMapCategory === 'All' || p.cat === currentMapCategory;
+        const matchEm = !emergencyPinsOnly || p.emergency;
+        const matchQ = p.name.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q);
+        return matchCat && matchEm && matchQ;
+      });
+
+      document.getElementById('map-pins-container').innerHTML = pins.map((p) => {
+        const pinColor = p.emergency ? 'bg-red-600' : p.cat === 'Parks' ? 'bg-emerald-500' : 'bg-sky-400';
+        const activeRing = selectedMapPin && selectedMapPin.id === p.id ? 'ring-4 ring-amber-300 scale-110 z-20' : 'z-10';
+        return `
+          <button onclick="selectMapPin(${p.id})" type="button" style="left:${p.x}%; top:${p.y}%" class="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group transition ${activeRing}">
+            <span class="w-4 h-4 rounded-full ${pinColor} border-2 border-white shadow-md"></span>
+            <span class="mt-1 px-1.5 py-0.5 rounded bg-slate-950/90 text-white text-[10px] font-bold whitespace-nowrap">${p.name}</span>
+          </button>
+        `;
+      }).join('');
+
+      renderMapDetailPanel();
+    }
+
+    function selectMapPin(id) {
+      selectedMapPin = MAP_PINS.find((p) => p.id === id) || MAP_PINS[0];
+      renderMapPins();
+    }
+
+    function selectPinByName(name) {
+      const found = MAP_PINS.find((p) => p.name.includes(name.split(' ')[0]));
+      if (found) selectMapPin(found.id);
+    }
+
+    function renderMapDetailPanel() {
+      const p = selectedMapPin;
+      if (!p) return;
+      document.getElementById('map-detail-panel').innerHTML = `
+        <div class="space-y-3 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full bg-sky-100 text-[#0A2463] font-bold">${p.cat}</span>
+            <span class="text-slate-500 font-semibold">Crowd: ${p.crowd}</span>
+          </div>
+          <h3 class="font-display font-extrabold text-lg text-[#0A2463]">${p.name}</h3>
+          <p class="text-slate-600 leading-relaxed">${p.info}</p>
+          <div class="p-3 rounded-xl bg-slate-100 text-slate-700">
+            <strong>Nearby Facilities:</strong> Smart Bus/Metro stop & public restrooms within 300m.
+          </div>
+        </div>
+        <div class="space-y-2 pt-4 border-t border-slate-200 text-xs">
+          <a href="#transport" onclick="document.getElementById('route-dest').value='${p.name.replace(/'/g, "\\'")}';" class="block w-full text-center py-2.5 rounded-xl bg-[#0A2463] text-white font-bold">
+            Get Directions in Route Planner
+          </a>
+        </div>
+      `;
+    }
+
+    // AI Environmental Assistant
+    function generateEcoTips() {
+      const goal = document.getElementById('eco-goal-select').value;
+      const tips = {
+        pollution: [
+          '• Use Blue/Green Metro or Electric Feeder Buses for daily commuting.',
+          '• Keep vehicle tires properly inflated and avoid idling at red signals.',
+          '• Support neighborhood tree plantation drives.'
+        ],
+        water: [
+          '• Fix dripping taps and use water-saving aerators in sinks.',
+          '• Reuse RO/greywater for balcony and garden plants.',
+          '• Report water pipeline leaks immediately via Citizen Helpdesk.'
+        ],
+        waste: [
+          '• Separate wet organic waste, dry recyclables, and hazardous e-waste.',
+          '• Compost kitchen scraps where possible and avoid single-use plastics.',
+          '• Drop e-waste at designated municipal collection points.'
+        ]
+      };
+      document.getElementById('eco-tips-box').innerHTML = tips[goal].map((t) => `<div>${t}</div>`).join('');
+    }
+
+    // News Rendering
+    function renderNews() {
+      document.getElementById('news-grid').innerHTML = NEWS_LIST.map((n) => `
+        <article class="glass-card rounded-2xl p-5 flex flex-col justify-between gap-3">
+          <div>
+            <div class="flex justify-between text-[11px] font-bold text-[#247BA0] mb-1.5">
+              <span>${n.tag}</span>
+              <span class="text-slate-400">${n.date}</span>
+            </div>
+            <h3 class="font-bold text-sm text-[#0A2463] leading-snug">${n.title}</h3>
+            <p class="text-xs text-slate-600 mt-1.5">${n.body}</p>
+          </div>
+          <button onclick="openInfoModal('${n.title.replace(/'/g, "\\'")}', '${n.date}\\n\\n${n.body.replace(/'/g, "\\'")}')" type="button" class="text-xs font-bold text-[#247BA0] text-left hover:underline">
+            Read More →
+          </button>
+        </article>
+      `).join('');
+    }
+
+    // Citizen Auth & Dashboard
+    function handleAuthButtonClick() {
+      document.getElementById('citizen-modal').classList.remove('hidden');
+      updateCitizenModalView();
+    }
+
+    function switchAuthTab(tab) {
+      const nameInput = document.getElementById('auth-name');
+      document.getElementById('tab-login').className = tab === 'login' ? 'px-3.5 py-1.5 rounded-xl bg-[#0A2463] text-white font-bold' : 'px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold';
+      document.getElementById('tab-register').className = tab === 'register' ? 'px-3.5 py-1.5 rounded-xl bg-[#0A2463] text-white font-bold' : 'px-3.5 py-1.5 rounded-xl bg-slate-100 text-slate-700 font-bold';
+      nameInput.classList.toggle('hidden', tab !== 'register');
+    }
+
+    function handleCitizenLogin(e) {
+      e.preventDefault();
+      const customName = document.getElementById('auth-name').value.trim();
+      const email = document.getElementById('auth-email').value.trim();
+      citizenUser = { name: customName || 'Aarav Sharma', email };
+      document.getElementById('btn-auth-trigger').textContent = 'Citizen Dashboard';
+      updateCitizenModalView();
+    }
+
+    function handleCitizenLogout() {
+      citizenUser = null;
+      document.getElementById('btn-auth-trigger').textContent = 'Login / Register';
+      updateCitizenModalView();
+    }
+
+    function updateCitizenModalView() {
+      const loggedIn = !!citizenUser;
+      document.getElementById('auth-form-view').classList.toggle('hidden', loggedIn);
+      document.getElementById('citizen-dashboard-view').classList.toggle('hidden', !loggedIn);
+      if (loggedIn) {
+        document.getElementById('citizen-modal-title').textContent = 'Smart Citizen Dashboard';
+        document.getElementById('cd-user-name').textContent = citizenUser.name;
+        document.getElementById('cd-user-email').textContent = citizenUser.email + ' • ID: SC-88412';
+      } else {
+        document.getElementById('citizen-modal-title').textContent = 'Citizen Login / Register';
+      }
+    }
+
+    function closeCitizenModal() {
+      document.getElementById('citizen-modal').classList.add('hidden');
+    }
+
+    // SOS Modal Controls
+    function openSosModal() {
+      document.getElementById('sos-confirm-box').classList.add('hidden');
+      document.getElementById('sos-consent-check').checked = false;
+      document.getElementById('sos-modal').classList.remove('hidden');
+    }
+
+    function closeSosModal() {
+      document.getElementById('sos-modal').classList.add('hidden');
+    }
+
+    function confirmSosDispatch() {
+      if (!document.getElementById('sos-consent-check').checked) {
+        document.getElementById('sos-confirm-box').classList.remove('hidden');
+        document.getElementById('sos-confirm-box').className = 'p-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 text-xs font-semibold';
+        document.getElementById('sos-confirm-box').textContent = 'Please check the location-sharing consent box first, or dial 112 directly.';
+        return;
+      }
+      document.getElementById('sos-confirm-box').classList.remove('hidden');
+      document.getElementById('sos-confirm-box').className = 'p-3 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs font-semibold';
+      document.getElementById('sos-confirm-box').textContent = '✓ SOS Alert Confirmed (Ref #SOS-2026-409). For immediate life-safety emergencies, also dial 112.';
+    }
+
+    // Search, Notifications & Info Modals
+    function openSearchModal() {
+      document.getElementById('search-modal').classList.remove('hidden');
+      document.getElementById('global-search-input').focus();
+      runGlobalSearch();
+    }
+
+    function closeSearchModal() {
+      document.getElementById('search-modal').classList.add('hidden');
+    }
+
+    function runGlobalSearch() {
+      const q = (document.getElementById('global-search-input').value || '').toLowerCase();
+      const items = [];
+      HOSPITALS.forEach((h) => items.push({ title: h.name, sub: 'Healthcare • ' + h.location, href: '#healthcare' }));
+      INSTITUTIONS.forEach((i) => items.push({ title: i.name, sub: 'Education • ' + i.badge, href: '#education' }));
+      CIVIC_SERVICES.forEach((s) => items.push({ title: s.title, sub: 'Public Service', href: '#services' }));
+      const matches = items.filter((it) => it.title.toLowerCase().includes(q) || it.sub.toLowerCase().includes(q)).slice(0, 8);
+      document.getElementById('global-search-results').innerHTML = matches.map((m) => `
+        <a href="${m.href}" onclick="closeSearchModal()" class="block p-2.5 rounded-xl hover:bg-sky-50 border border-transparent hover:border-sky-200">
+          <div class="font-bold text-[#0A2463]">${m.title}</div>
+          <div class="text-slate-500">${m.sub}</div>
+        </a>
+      `).join('') || '<div class="text-slate-400 text-center py-4">No matching city resources found.</div>';
+    }
+
+    function toggleNotifDrawer() {
+      document.getElementById('notif-drawer').classList.toggle('hidden');
+    }
+
+    function openInfoModal(title, body) {
+      document.getElementById('info-modal-title').textContent = title;
+      document.getElementById('info-modal-body').textContent = body;
+      document.getElementById('info-modal').classList.remove('hidden');
+    }
+
+    function closeInfoModal() {
+      document.getElementById('info-modal').classList.add('hidden');
+    }
+
+    function handleContactSubmit(e) {
+      e.preventDefault();
+      document.getElementById('contact-feedback').textContent = '✓ Message received by Smart City Helpdesk.';
+      e.target.reset();
+    }
+
+    // CITYBOT AI Assistant & Voice Input
+    function toggleCitybot() {
+      document.getElementById('citybot-panel').classList.toggle('hidden');
+    }
+
+    function askCitybot(text) {
+      const box = document.getElementById('citybot-messages');
+      box.innerHTML += `<div class="p-2.5 rounded-2xl bg-[#0A2463] text-white ml-auto max-w-[85%]">${text}</div>`;
+
+      const lq = text.toLowerCase();
+      let reply = 'You can explore Live Dashboard telemetry, plan trips in the AI Route Planner, book hospital visits, or track civic complaints.';
+      if (lq.includes('hospital') || lq.includes('health') || lq.includes('ambulance')) {
+        reply = 'Apex Govt Trauma Hospital (Sector 4) and Horizon Private Hospital (Tech Corridor) are listed in Healthcare. Dial 108 for ambulance assistance.';
+      } else if (lq.includes('metro') || lq.includes('bus') || lq.includes('route') || lq.includes('transport')) {
+        reply = 'Blue Line Metro runs every 4 mins and Green Line every 5 mins, supported by Electric Feeder Buses. Use the AI Smart Route Planner above for custom routes.';
+      } else if (lq.includes('park') || lq.includes('ev') || lq.includes('charg')) {
+        reply = 'Central Plaza Smart Deck has 142 free parking slots and 18 EV chargers; Tech Corridor EV Hub has 24 fast chargers.';
+      } else if (lq.includes('emergency') || lq.includes('police') || lq.includes('fire') || lq.includes('sos')) {
+        reply = 'Emergency Helplines: 112 (Unified), 100 (Police), 101 (Fire), 108 (Ambulance). Click the red SOS button for location-consent alerts.';
+      } else if (lq.includes('school') || lq.includes('college') || lq.includes('education') || lq.includes('library')) {
+        reply = 'Check out the AI Education Finder in the Education section for schools, NISUT University, skill centers, and the Central Digital Library.';
+      }
+
+      box.innerHTML += `<div class="p-3 rounded-2xl bg-white border border-slate-200 text-slate-800 mr-auto max-w-[88%]">${reply}</div>`;
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function startVoiceInput() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const btn = document.getElementById('btn-voice');
+      if (SpeechRecognition) {
+        try {
+          const rec = new SpeechRecognition();
+          rec.lang = 'en-IN';
+          btn.textContent = '🔴';
+          rec.onresult = (ev) => {
+            btn.textContent = '🎤';
+            askCitybot(ev.results[0][0].transcript);
+          };
+          rec.onerror = () => {
+            btn.textContent = '🎤';
+            askCitybot('Nearest hospital');
+          };
+          rec.onend = () => {
+            btn.textContent = '🎤';
+          };
+          rec.start();
+          return;
+        } catch (err) {
+          btn.textContent = '🎤';
+        }
+      }
+      askCitybot('Nearest hospital and metro schedule');
+    }
+  </script>
+</body>
+</html>
